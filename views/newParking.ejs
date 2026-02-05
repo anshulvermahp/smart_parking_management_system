@@ -4,18 +4,18 @@
   <meta charset="UTF-8" />
   <title>Add Parking Area | ParkSpot</title>
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     * {
       box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Google Sans', Arial, sans-serif;
     }
 
     body {
       margin: 0;
-      background: #f5f5f5;
+      background: #fff;        /* ✅ pure white */
+      min-height: 100vh;
     }
 
     /* ===== NAVBAR ===== */
@@ -23,93 +23,148 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 40px;
+      padding: 16px 32px;
       background: #fff;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #e5e5e5;
     }
 
     .logo {
       font-size: 22px;
       font-weight: 700;
-      color: #f4b400;
+      color: #000;
     }
 
     .nav-right a {
       margin-left: 20px;
       text-decoration: none;
-      color: #333;
+      color: #000;
       font-weight: 500;
     }
 
     .login-btn {
-      background: #f4b400;
+      background: #000;
+      color: #fff;
       padding: 8px 16px;
       border-radius: 6px;
-      color: #000;
       font-weight: 600;
     }
 
-    /* ===== HERO ===== */
-    .hero {
-      height: calc(100vh - 70px);
-      background: url("https://images.unsplash.com/photo-1506521781263-d8422e82f27a")
-        center / cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    /* ===== PAGE ===== */
+    .page {
+      padding: 24px 32px;     /* ✅ reduced padding */
     }
 
-    /* ===== CARD ===== */
+    /* ===== FORM CONTAINER ===== */
     .card {
+      max-width: 1200px;      /* ✅ wide form */
+      margin: 0 auto;
       background: #fff;
-      width: 420px;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      padding: 24px 28px;     /* ✅ tight padding */
+      border-radius: 18px;
     }
 
     .card h2 {
-      margin-bottom: 20px;
+      margin: 0 0 20px;
       font-size: 24px;
+      font-weight: 700;
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* ===== GRID ===== */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* ✅ 3 columns */
+      gap: 14px 18px;
     }
 
     .form-group {
-      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full {
+      grid-column: span 3;
+    }
+
+    .form-group.two {
+      grid-column: span 2;
     }
 
     .form-group label {
-      display: block;
-      margin-bottom: 6px;
+      font-size: 13px;
       font-weight: 600;
+      margin-bottom: 6px;
     }
 
     .form-group input {
-      width: 100%;
       padding: 10px 12px;
-      border-radius: 6px;
+      border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 14px;
     }
 
+    .form-group small {
+      font-size: 11px;
+      color: #666;
+      margin-top: 4px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    /* ===== SUBMIT ===== */
     .submit-btn {
       width: 100%;
-      padding: 12px;
-      background: #f4b400;
+      padding: 14px;
+      background: #000;
+      color: #fff;
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
+      border-radius: 10px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
     }
 
     .submit-btn:hover {
-      background: #e0a800;
+      background: #111;
     }
 
-    .hint {
-      font-size: 12px;
-      color: #666;
-      margin-top: 4px;
+    /* ===== SMALL SCREENS ===== */
+    @media (max-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .form-group.full,
+      .form-group.two {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full,
+      .form-group.two {
+        grid-column: span 1;
+      }
     }
   </style>
 </head>
@@ -127,49 +182,135 @@
     </div>
   </div>
 
-  <!-- HERO -->
-  <div class="hero">
+  <!-- PAGE -->
+  <div class="page">
     <div class="card">
 
       <h2>Add Parking Area</h2>
 
-    <form action="/admin/add-parking" method="POST" enctype="multipart/form-data">
+      <form action="/admin/add-parking" method="POST" enctype="multipart/form-data">
 
-  <div class="form-group">
-    <label>Parking Name</label>
-    <input type="text" name="name" required>
-  </div>
+        <!-- BASIC -->
+        <div class="section">
+          <div class="section-title">Basic Information</div>
+          <div class="grid">
+            <div class="form-group full">
+              <label>Parking Name</label>
+              <input type="text" name="name" required>
+            </div>
+          </div>
+        </div>
 
-  <div class="form-group">
-    <label>Google Maps Link</label>
-    <input
-      type="text"
-      name="mapLink"
-      placeholder="Paste full Google Maps link"
-      required
-    >
-    <small>Latitude & longitude will be extracted automatically</small>
-  </div>
+        <!-- ADDRESS -->
+        <div class="section">
+          <div class="section-title">Address</div>
+          <div class="grid">
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" name="city" required>
+            </div>
+            <div class="form-group">
+              <label>State</label>
+              <input type="text" name="state" required>
+            </div>
+            <div class="form-group">
+              <label>ZIP Code</label>
+              <input type="text" name="zip" required>
+            </div>
+            <div class="form-group">
+              <label>Country</label>
+              <input type="text" name="country" required>
+            </div>
+            <div class="form-group full">
+              <label>Street Address</label>
+              <input type="text" name="street" required>
+            </div>
+          </div>
+        </div>
 
-  <div class="form-group">
-    <label>Total Slots</label>
-    <input type="number" name="totalSlots" required>
-  </div>
+        <!-- LOCATION -->
+        <div class="section">
+          <div class="section-title">Location</div>
+          <div class="grid">
+            <div class="form-group full">
+              <label>Google Maps Link</label>
+              <input type="text" name="mapLink" required>
+              <small>Latitude & longitude will be extracted automatically</small>
+            </div>
+          </div>
+        </div>
 
-  <div class="form-group">
-    <label>Available Slots</label>
-    <input type="number" name="availableSlots" required>
-  </div>
-  
-  <div class="form-group">
-    <label>Parking Images</label>
-    <input type="file" name="images" multiple accept="image/*">
-    <small>You can upload multiple images</small>
-  </div>
-  <button type="submit">Add Parking</button>
+        <!-- CAPACITY -->
+        <div class="section">
+          <div class="section-title">Capacity</div>
+          <div class="grid">
+            <div class="form-group">
+              <label>Total Slots</label>
+              <input type="number" name="totalSlots" required>
+            </div>
+            <div class="form-group">
+              <label>Available Slots</label>
+              <input type="number" name="availableSlots" required>
+            </div>
+          </div>
+        </div>
 
-</form>
+        <!-- PRICING -->
+        <div class="section">
+          <div class="section-title">Pricing</div>
+          <div class="grid">
+            <div class="form-group">
+              <label>Hourly</label>
+              <input type="number" name="pricingHourly" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <label>Daily</label>
+              <input type="number" name="pricingDaily" step="0.01">
+            </div>
+            <div class="form-group">
+              <label>Monthly</label>
+              <input type="number" name="pricingMonthly" step="0.01">
+            </div>
+          </div>
+        </div>
 
+        <!-- OPERATIONS -->
+        <div class="section">
+          <div class="section-title">Operations</div>
+          <div class="grid">
+            <div class="form-group">
+              <label>Open Time</label>
+              <input type="time" name="operationalOpen" required>
+            </div>
+            <div class="form-group">
+              <label>Close Time</label>
+              <input type="time" name="operationalClose" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECURITY -->
+        <div class="section">
+          <div class="section-title">Security & Media</div>
+          <div class="grid">
+            <div class="form-group full">
+              <label>Security</label>
+              <div class="checkbox-group">
+                <label><input type="checkbox" name="securityCctv"> CCTV</label>
+                <label><input type="checkbox" name="securityGuard"> Guard</label>
+                <label><input type="checkbox" name="securityGated"> Gated</label>
+              </div>
+            </div>
+            <div class="form-group full">
+              <label>Parking Images</label>
+              <input type="file" name="images" multiple>
+            </div>
+          </div>
+        </div>
+
+        <button class="submit-btn" type="submit">Add Parking</button>
+
+      </form>
 
     </div>
   </div>

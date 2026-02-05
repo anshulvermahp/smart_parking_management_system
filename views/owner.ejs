@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root{font-family:'Google Sans', Arial,Helvetica,sans-serif;color:#111}
+        body{margin:0;background:#f5f5f5}
+        .container{max-width:720px;margin:48px auto;padding:28px;border-radius:12px;background:#fff;box-shadow:0 18px 40px rgba(0,0,0,0.08)}
+        h1{margin:0 0 8px;font-size:1.6rem;font-weight:700;color:#000}
+        p.lead{margin:0 0 18px;color:#333}
+        .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .full{grid-column:1/-1}
+        label{display:block;margin-bottom:6px;font-weight:700;color:#000;font-size:0.95rem}
+        input[type="text"],input[type="email"],input[type="password"],input[type="file"]{width:100%;padding:10px;border:1px solid #dedede;border-radius:8px;background:#fff;color:#000}
+        .actions{margin-top:18px;display:flex;gap:12px;align-items:center}
+        button{background:#000;border:none;color:#fff;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:700}
+        button:hover{background:#222}
+        button[disabled]{opacity:.6;cursor:not-allowed}
+        #spinner{color:#444;font-size:0.95rem}
+        #message{margin-top:18px;padding:14px;border-radius:8px;display:none;font-weight:600}
+        #message.success{background:#000;color:#fff;border:1px solid #000}
+        #message.error{background:#fff;color:#000;border:1px solid #000}
+        @media(max-width:600px){.grid{grid-template-columns:1fr}.container{margin:20px;padding:18px}}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Owner Registration</h1>
+
+        <form id="ownerForm" action="/owners/owner_registration" method="POST" enctype="multipart/form-data">
+            <div class="grid">
+                <div>
+                    <label for="ownerName">Owner Name</label>
+                    <input type="text" id="ownerName" name="username" placeholder="Full name" required>
+                </div>
+
+                <div>
+                    <label for="ownerEmail">Email</label>
+                    <input type="email" id="ownerEmail" name="email" placeholder="name@example.com" required>
+                </div>
+
+                <div>
+                    <label for="ownerContactNumber">Contact Number</label>
+                    <input type="text" id="ownerContactNumber" name="contactNumber" placeholder="Mobile or landline" required>
+                </div>
+
+                <div>
+                    <label for="ownerPassword">Password</label>
+                    <input type="password" id="ownerPassword" name="password" placeholder="Choose a secure password" required>
+                </div>
+
+                <div class="full">
+                    <label for="proofOfOwnership">Proof of Ownership (image/PDF)</label>
+                    <input type="file" id="proofOfOwnership" name="proofOfOwnership" accept="image/*,.pdf" required>
+                </div>
+
+                <div class="full">
+                    <label for="profilePicture">Profile Picture (optional)</label>
+                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="submit" id="submitBtn">Register</button>
+                <div id="spinner" style="display:none">Submitting…</div>
+            </div>
+        </form>
+
+        <div id="message" role="status" aria-live="polite" style="display:none"></div>
+    </div>
+
+    <script>
+        (function(){
+            const form = document.getElementById('ownerForm');
+            const btn = document.getElementById('submitBtn');
+            const spinner = document.getElementById('spinner');
+
+            form.addEventListener('submit', async function(e){
+                e.preventDefault();
+                btn.disabled = true;
+                spinner.textContent = 'Submitting...';
+                spinner.style.display = '';
+
+                const fd = new FormData(form);
+
+                try{
+                    const resp = await fetch(form.action, {method: form.method || 'POST', body: fd});
+                        if(resp.ok){
+                            // short confirmation then redirect to owner profile
+                            spinner.textContent = 'Submitted — redirecting...';
+                            setTimeout(() => { window.location.href = '/owners/profile'; }, 800);
+                        } else {
+                            const text = await resp.text().catch(()=>'');
+                            showMessage(text || 'Submission failed. Please try again later.', true);
+                            btn.disabled = false;
+                            spinner.style.display = 'none';
+                        }
+                }catch(err){
+                    showMessage('Network error. Please check your connection and try again.', true);
+                    btn.disabled = false;
+                    spinner.style.display = 'none';
+                }
+            });
+
+            function showMessage(text, isError){
+                const msgEl = document.getElementById('message');
+                msgEl.textContent = text;
+                msgEl.className = isError ? 'error' : 'success';
+                msgEl.style.display = '';
+            }
+            });
+        
+    </script>
+</body>
+</html>

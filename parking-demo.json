@@ -1,0 +1,184 @@
+[
+  {
+    "name": "Sector 17 Plaza Parking",
+    "address": {
+      "street": "Sector 17 Plaza",
+      "city": "Chandigarh",
+      "state": "Chandigarh",
+      "zip": "160017",
+      "country": "India"
+    },
+    "latitude": 30.741482,
+    "longitude": 76.768066,
+    "totalSlots": 200,
+    "availableSlots": 120,
+    "mapLink": "https://maps.google.com/?q=30.741482,76.768066",
+    "images": [
+      "https://images.unsplash.com/photo-1506521781263-d8422e82f27a",
+      "https://images.unsplash.com/photo-1502877338535-766e1452684a"
+    ],
+    "contact": {
+      "phone": "+91-9876543210",
+      "email": "sector17@parkspot.in"
+    },
+    "pricing": {
+      "hourly": 30,
+      "daily": 200,
+      "monthly": 2500
+    },
+    "operationalHours": {
+      "open": "08:00",
+      "close": "22:00"
+    },
+    "amenities": ["CCTV", "Covered Parking", "EV Charging"],
+    "security": {
+      "cctv": true,
+      "guard": true,
+      "gated": true
+    }
+  },
+  {
+    "name": "Elante Mall Parking",
+    "address": {
+      "street": "Industrial Area Phase 1",
+      "city": "Chandigarh",
+      "state": "Chandigarh",
+      "zip": "160002",
+      "country": "India"
+    },
+    "latitude": 30.705493,
+    "longitude": 76.801889,
+    "totalSlots": 500,
+    "availableSlots": 320,
+    "mapLink": "https://maps.google.com/?q=30.705493,76.801889",
+    "images": [
+      "https://images.unsplash.com/photo-1542362567-b07e54358753",
+      "https://images.unsplash.com/photo-1604066867775-43f48e3957d8"
+    ],
+    "contact": {
+      "phone": "+91-9812345678",
+      "email": "elante@parkspot.in"
+    },
+    "pricing": {
+      "hourly": 40,
+      "daily": 300,
+      "monthly": 4000
+    },
+    "operationalHours": {
+      "open": "09:00",
+      "close": "23:00"
+    },
+    "amenities": ["CCTV", "Guard", "Covered Parking"],
+    "security": {
+      "cctv": true,
+      "guard": true,
+      "gated": true
+    }
+  },
+  {
+    "name": "Sector 35 Market Parking",
+    "address": {
+      "street": "Sector 35 C",
+      "city": "Chandigarh",
+      "state": "Chandigarh",
+      "zip": "160035",
+      "country": "India"
+    },
+    "latitude": 30.719996,
+    "longitude": 76.762442,
+    "totalSlots": 150,
+    "availableSlots": 60,
+    "mapLink": "https://maps.google.com/?q=30.719996,76.762442",
+    "images": [
+      "https://images.unsplash.com/photo-1597764690523-15bea4c581c9"
+    ],
+    "contact": {
+      "phone": "+91-9999988888"
+    },
+    "pricing": {
+      "hourly": 25,
+      "daily": 180
+    },
+    "operationalHours": {
+      "open": "07:00",
+      "close": "21:00"
+    },
+    "amenities": ["CCTV"],
+    "security": {
+      "cctv": true,
+      "guard": false,
+      "gated": false
+    }
+  },
+  {
+    "name": "ISBT Sector 43 Parking",
+    "address": {
+      "street": "Sector 43 Bus Stand",
+      "city": "Chandigarh",
+      "state": "Chandigarh",
+      "zip": "160043",
+      "country": "India"
+    },
+    "latitude": 30.708848,
+    "longitude": 76.756492,
+    "totalSlots": 300,
+    "availableSlots": 190,
+    "mapLink": "https://maps.google.com/?q=30.708848,76.756492",
+    "images": [
+      "https://images.unsplash.com/photo-1604066867775-43f48e3957d8"
+    ],
+    "contact": {
+      "phone": "+91-9123456789"
+    },
+    "pricing": {
+      "hourly": 20,
+      "daily": 150
+    },
+    "operationalHours": {
+      "open": "00:00",
+      "close": "23:59"
+    },
+    "amenities": ["24x7 Access", "CCTV"],
+    "security": {
+      "cctv": true,
+      "guard": true,
+      "gated": false
+    }
+  },
+  {
+    "name": "IT Park Chandigarh Parking",
+    "address": {
+      "street": "Rajiv Gandhi IT Park",
+      "city": "Chandigarh",
+      "state": "Chandigarh",
+      "zip": "160101",
+      "country": "India"
+    },
+    "latitude": 30.733314,
+    "longitude": 76.834465,
+    "totalSlots": 250,
+    "availableSlots": 140,
+    "mapLink": "https://maps.google.com/?q=30.733314,76.834465",
+    "images": [
+      "https://images.unsplash.com/photo-1502877338535-766e1452684a"
+    ],
+    "contact": {
+      "email": "itpark@parkspot.in"
+    },
+    "pricing": {
+      "hourly": 35,
+      "daily": 250,
+      "monthly": 3000
+    },
+    "operationalHours": {
+      "open": "08:00",
+      "close": "20:00"
+    },
+    "amenities": ["EV Charging", "CCTV"],
+    "security": {
+      "cctv": true,
+      "guard": true,
+      "gated": true
+    }
+  }
+]

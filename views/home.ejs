@@ -1,174 +1,316 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ParkSpot</title>
+  <title>Parking.com</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Bootstrap 5 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
   <style>
     body {
-      font-family: "Segoe UI", Arial, sans-serif;
+      font-family: 'Google Sans', Arial, sans-serif !important;
+      font-weight: 700 !important;
+      margin: 0;
+      padding: 0;
+      background: #f8f9fa;
     }
-
-    /* HERO BG */
-    .hero {
-      min-height: 90vh;
-      background: url("/images/bg2.jpg") center/cover no-repeat;
+    .hero-bg {
+      min-height: 100vh;
+      background: url('/images/bg2.jpg') center/cover no-repeat;
       position: relative;
       display: flex;
-      align-items: center;
+      flex-direction: column;
     }
-
     .hero-overlay {
-      background: rgba(0,0,0,0.15);
       position: absolute;
       inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 1;
     }
-
-    /* SEARCH CARD */
-    .search-card {
+    .navbar {
+      background: transparent !important;
+      border-bottom: none;
+      z-index: 10;
+    }
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.7rem;
+      color: #222;
+      letter-spacing: -1px;
+    }
+    .btn-login {
       background: #fff;
+      border: 1px solid #ddd;
       border-radius: 8px;
-      padding: 32px;
-      max-width: 520px;
-      box-shadow: 0 20px 40px rgba(0,0,0,.15);
+      font-weight: 500;
+      padding: 8px 22px;
+      transition: background .2s;
+    }
+    .btn-login:hover {
+      background: #f3f3f3;
+    }
+    .main-content {
       position: relative;
       z-index: 2;
-    }
-
-    .tabs {
-      display: flex;
-      border-bottom: 1px solid #eee;
-      margin-bottom: 25px;
-    }
-
-    .tab {
       flex: 1;
-      text-align: center;
-      padding: 12px;
-      font-weight: 500;
-      color: #555;
-      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 80vh;
     }
-
-    .tab.active {
-      color: #0d6efd;
-      border-bottom: 3px solid #0d6efd;
-    }
-
-    .search-title {
-      font-size: 42px;
+    .hero-title {
+      color: #fff;
+      font-size: 4vw;
       font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 25px;
+      margin-bottom: 18px;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.18);
     }
-
-    .search-input {
-      height: 52px;
-      font-size: 16px;
+    .hero-subtitle {
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 400;
+      margin-bottom: 36px;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.18);
     }
-
-    .btn-search {
-      background: #ffd66e;
+    .hero-btns {
+      margin-bottom: 38px;
+    }
+    .btn-reserve {
+      background: #000;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 12px 32px;
+      font-size: 1.1rem;
+      margin-right: 10px;
       border: none;
-      color: #000;
-      padding: 10px 26px;
-      font-weight: 600;
-      margin-top: 20px;
+      transition: background .2s;
     }
-
-    .btn-search:hover {
-      background: #ffcb45;
+    .btn-reserve:hover {
+      background: #222;
     }
-
-    /* NAVBAR */
-    .navbar {
+    .btn-monthly {
       background: #fff;
-      border-bottom: 1px solid #eee;
-    }
-
-    .login-btn {
-      background: #ffd66e;
-      border-radius: 6px;
-      padding: 6px 14px;
+      color: #000;
       font-weight: 600;
+      border-radius: 8px;
+      padding: 12px 32px;
+      font-size: 1.1rem;
+      border: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: background .2s;
+    }
+    .btn-monthly:hover {
+      background: #f3f3f3;
+    }
+    .search-bar {
+      background: rgba(255,255,255,0.97);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+      padding: 32px 24px 24px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: end;
+    }
+    .search-bar .form-control {
+      height: 56px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+    }
+    .search-bar .btn-find {
+      background: #e6e6e6;
+      color: #888;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 14px 32px;
+      font-size: 1.1rem;
+      border: none;
+      transition: background .2s;
+    }
+    .search-bar .btn-find:enabled {
+      background: #fff;
+      color: #000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    @media (max-width: 991px) {
+      .hero-title { font-size: 2.2rem; }
+      .hero-subtitle { font-size: 1.1rem; }
+      .search-bar { flex-direction: column; align-items: stretch; }
     }
   </style>
 </head>
 <body>
-
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg">
-  <div class="container">
-    <a class="navbar-brand fw-bold fs-4" href="#">
-      <i class="bi bi-geo-alt-fill text-warning"></i> ParkSpot
-    </a>
-
-    <ul class="navbar-nav ms-auto align-items-center">
-      <li class="nav-item me-3"><a class="nav-link" href="#">Register </a></li>
-      <li class="nav-item me-3"><a class="nav-link" href="#">Login</a></li>
-      <li class="nav-item me-3"><a class="nav-link" href="#">about us </a></li>
-      <li class="nav-item me-3">
-        <i class="bi bi-telephone"></i> +91 74882 39471
-      </li>
-      <li class="nav-item">
-        <a class="btn login-btn" href="#">Log in</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-overlay"></div>
-
-  <div class="container">
-    <div class="search-card">
-
-      <!-- Tabs -->
-      <div class="tabs">
-        <div class="tab active">
-          <i class="bi bi-car-front"></i><br>
-          Find spot
-        </div>
-        <div class="tab">
-          <i class="bi bi-house-door"></i><br>
-          Rent spot
+  <div class="hero-bg">
+    <div class="hero-overlay"></div>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg py-3">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#fff" viewBox="0 0 24 24" style="margin-right:10px;"><path fill="#222" d="M12.5 2.5a.75.75 0 0 1 .75.75v2.5a.75.75 0 0 1-1.5 0V3.25a.75.75 0 0 1 .75-.75Zm7.03 2.72a.75.75 0 0 1 0 1.06l-1.77 1.77a.75.75 0 1 1-1.06-1.06l1.77-1.77a.75.75 0 0 1 1.06 0ZM21.5 12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h2.5a.75.75 0 0 1 .75.75Zm-2.72 7.03a.75.75 0 0 1-1.06 0l-1.77-1.77a.75.75 0 1 1 1.06-1.06l1.77 1.77a.75.75 0 0 1 0 1.06ZM12.5 21.5a.75.75 0 0 1-.75-.75v-2.5a.75.75 0 0 1 1.5 0v2.5a.75.75 0 0 1-.75.75Zm-7.03-2.72a.75.75 0 0 1 0-1.06l1.77-1.77a.75.75 0 1 1 1.06 1.06l-1.77 1.77a.75.75 0 0 1-1.06 0ZM2.5 12.5a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5H3.25a.75.75 0 0 1-.75-.75Zm2.72-7.03a.75.75 0 0 1 1.06 0l1.77 1.77a.75.75 0 1 1-1.06 1.06L4.22 6.53a.75.75 0 0 1 0-1.06Z"/><circle cx="12" cy="12" r="5.25" fill="#ffd66e"/></svg>
+          <span style="color:#222;">Parking.com</span>
+        </a>
+        <div class="ms-auto d-flex align-items-center">
+          <% if (typeof user !== 'undefined' && user) { %>
+            <a href="/profile" title="Profile" style="display:flex;align-items:center;gap:8px;text-decoration:none;color:inherit;">
+              <% if (user.profilePicture) { %>
+                <img src="<%= user.profilePicture %>" alt="avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #fff;" />
+              <% } else { %>
+                <div style="width:36px;height:36px;border-radius:50%;background:#ddd;display:inline-block;"></div>
+              <% } %>
+              <span style="margin-left:8px;color:#222;font-weight:600;">Profile</span>
+            </a>
+          <% } else { %>
+            <a class="btn btn-login" href="/login">Log in</a>
+            <a class="btn btn-login ms-2" href="/register">Sign up</a>
+          <% } %>
         </div>
       </div>
-
-      <!-- Content -->
-      <h1 class="search-title">
-        Search parking spot<br>in seconds
-      </h1>
-
-      <!-- <input type="text"
-        class="form-control search-input"
-        placeholder="e.g. Bengaluru, Hyderabad, Chennai">
-
-      <button class="btn btn-search">
-        Search now
-      </button> -->
-      <form action="/map" method="GET">
-  <input
-    type="text"
-    name="area"
-    placeholder="Enter area name"
-    required
-  />
-  <button type="submit">Find Parking</button>
-</form>
-
+    </nav>
+    <!-- HERO CONTENT -->
+    <div class="main-content container">
+      <div class="text-center">
+        <h1 class="hero-title">Parking for any journey</h1>
+        <div class="hero-subtitle mb-4">Reserve your space with ease across thousands of locations<br>in India.</div>
+      </div>
+      <form class="search-bar d-flex flex-row justify-content-center align-items-center gap-2" action="/map" method="GET" style="z-index:2; max-width:600px; margin:0 auto;">
+        <div class="position-relative flex-grow-1" id="areaInputParent">
+          <input type="text" class="form-control ps-5" id="areaInput" placeholder="Enter an area, city, or landmark" name="area" required autocomplete="off" style="width:100%; min-width:220px;">
+          <button type="button" id="gpsBtn" class="btn position-absolute top-50 start-0 translate-middle-y ms-2 d-none" tabindex="-1" style="background:transparent; border:none; color:#222; font-size:1.5rem; z-index:3;" aria-label="Use GPS">
+            <!-- New location icon: map pin -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" viewBox="0 0 24 24"><path d="M12 2C7.03 2 3 6.03 3 11c0 5.25 7.13 10.45 8.09 11.13a1 1 0 0 0 1.18 0C13.87 21.45 21 16.25 21 11c0-4.97-4.03-9-9-9Zm0 13a4 4 0 1 1 0-8 4 4 0 0 1 0 8Z" fill="#ffd66e"/><circle cx="12" cy="11" r="2.5" fill="#222"/></svg>
+          </button>
+        </div>
+        <button class="btn btn-find flex-shrink-0" type="submit" style="min-width:140px;">Find parking</button>
+      </form>
     </div>
   </div>
-</section>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Show GPS button only when input is focused
+    const areaInput = document.getElementById('areaInput');
+    const gpsBtn = document.getElementById('gpsBtn');
+    areaInput.addEventListener('focus', () => {
+      gpsBtn.classList.remove('d-none');
+    });
+    areaInput.addEventListener('blur', () => {
+      setTimeout(() => gpsBtn.classList.add('d-none'), 200); // allow click
+    });
+    gpsBtn.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          // Use OpenStreetMap Nominatim API for reverse geocoding
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+            .then(response => response.json())
+            .then(data => {
+              let displayName = data.display_name;
+              if (displayName) {
+                areaInput.value = displayName;
+              } else {
+                areaInput.value = `${lat},${lng}`;
+              }
+            })
+            .catch(() => {
+              areaInput.value = `${lat},${lng}`;
+            });
+        }, function (error) {
+          alert('Unable to retrieve your location.');
+        });
+      } else {
+        alert('Geolocation is not supported by your browser.');
+      }
+    });
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    // Custom autocomplete for Indian locations using Nominatim API
+    // Ensure parent is position:relative
+    document.getElementById('areaInputParent').style.position = 'relative';
+    const suggestionBox = document.createElement('div');
+    suggestionBox.style.position = 'absolute';
+    suggestionBox.style.left = '0';
+    suggestionBox.style.right = '0';
+    suggestionBox.style.top = '110%';
+    suggestionBox.style.zIndex = '100';
+    suggestionBox.style.background = '#fff';
+    suggestionBox.style.border = '1px solid #eee';
+    suggestionBox.style.borderTop = 'none';
+    suggestionBox.style.borderRadius = '0 0 10px 10px';
+    suggestionBox.style.boxShadow = '0 4px 16px rgba(0,0,0,0.13)';
+    suggestionBox.style.display = 'none';
+    suggestionBox.style.maxHeight = '220px';
+    suggestionBox.style.overflowY = 'auto';
+    suggestionBox.style.padding = '0';
+    suggestionBox.style.margin = '0';
+    suggestionBox.className = 'list-group';
+    document.getElementById('areaInputParent').appendChild(suggestionBox);
+
+    let debounceTimeout;
+    areaInput.addEventListener('input', function() {
+      const query = areaInput.value.trim();
+      if (debounceTimeout) clearTimeout(debounceTimeout);
+      if (!query) {
+        suggestionBox.style.display = 'none';
+        return;
+      }
+      debounceTimeout = setTimeout(() => {
+        fetch(`https://nominatim.openstreetmap.org/search?country=India&q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=7`)
+          .then(res => res.json())
+          .then(data => {
+            suggestionBox.innerHTML = '';
+            if (data.length === 0) {
+              const noRes = document.createElement('div');
+              noRes.className = 'list-group-item';
+              noRes.style.color = '#888';
+              noRes.textContent = 'No suggestions found';
+              suggestionBox.appendChild(noRes);
+              suggestionBox.style.display = 'block';
+              return;
+            }
+            data.forEach(item => {
+              const option = document.createElement('button');
+              option.type = 'button';
+              option.className = 'list-group-item list-group-item-action';
+              option.style.textAlign = 'left';
+              option.style.fontSize = '1rem';
+              option.textContent = item.display_name;
+              option.onclick = (e) => {
+                e.preventDefault();
+                areaInput.value = item.display_name;
+                // Trigger input event for compatibility with validation and frameworks
+                const event = new Event('input', { bubbles: true });
+                areaInput.dispatchEvent(event);
+                suggestionBox.style.display = 'none';
+              };
+              suggestionBox.appendChild(option);
+            });
+            suggestionBox.style.display = 'block';
+          })
+          .catch(() => {
+            suggestionBox.innerHTML = '';
+            const err = document.createElement('div');
+            err.className = 'list-group-item';
+            err.style.color = '#d00';
+            err.textContent = 'Error loading suggestions';
+            suggestionBox.appendChild(err);
+            suggestionBox.style.display = 'block';
+          });
+      }, 250);
+    });
+    // Hide suggestions on blur (with delay for click)
+    areaInput.addEventListener('blur', () => {
+      setTimeout(() => { suggestionBox.style.display = 'none'; }, 200);
+    });
+    // Show suggestions on focus if there are any
+    areaInput.addEventListener('focus', () => {
+      if (suggestionBox.innerHTML.trim() !== '') {
+        suggestionBox.style.display = 'block';
+      }
+    });
+  </script>
 </body>
 </html>

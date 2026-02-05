@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Book Parking Slot</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #f2f2f2;
+  overflow: hidden;
+}
+
+/* ===== LAYOUT ===== */
+.page-wrapper {
+  height: 100vh;
+  display: flex;
+}
+
+/* LEFT */
+.left-panel {
+  width: 65%;
+  padding: 28px;
+}
+
+/* RIGHT */
+.right-panel {
+  width: 35%;
+  padding: 28px;
+  display: flex;
+  justify-content: center;   /* horizontal center */
+       /* vertical center */
+}
+
+
+
+/* ===== LEFT CARD ===== */
+.left-card {
+  background: #fff;
+  border-radius: 22px;
+  padding: 26px;
+  height: 100%;
+}
+
+/* TITLE */
+.left-card h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 18px;
+}
+
+/* SLIDER */
+.carousel-inner img {
+  height: 300px;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+/* DETAILS */
+.left-details {
+  margin-top: 22px;
+}
+
+.label {
+  font-weight: 600;
+  color: #000;
+  margin-top: 14px;
+}
+
+.value {
+  color: #444;
+  font-size: 0.95rem;
+}
+
+/* GRID */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-top: 18px;
+}
+
+/* ===== RIGHT FORM ===== */
+.booking-form {
+  width: 100%;
+  background: #fff;                /* SAME AS LEFT */
+  border-radius: 22px;
+  padding: 26px;
+}
+
+.booking-form label {
+  font-weight: 600;
+}
+
+.booking-form button {
+  background: #111;
+  border: none;
+  padding: 14px;
+  font-weight: 600;
+}
+
+/* MOBILE */
+@media (max-width: 991px) {
+  body { overflow: auto; }
+
+  .page-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+
+
+
+  .left-panel,
+  .right-panel {
+    width: 100%;
+  }
+
+  .right-panel {
+    align-items: stretch;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<%
+  let addressText = '';
+  let mapDest = '';
+
+  if (parking.address) {
+    addressText = [
+      parking.address.street,
+      parking.address.city,
+      parking.address.state,
+      parking.address.country
+    ].filter(Boolean).join(', ');
+  }
+
+  if (parking.location?.lat && parking.location?.lng) {
+    mapDest = parking.location.lat + ',' + parking.location.lng;
+  } else if (parking.coordinates?.lat && parking.coordinates?.lng) {
+    mapDest = parking.coordinates.lat + ',' + parking.coordinates.lng;
+  }
+%>
+
+<div class="page-wrapper">
+
+  <!-- LEFT -->
+  <div class="left-panel">
+    <div class="left-card">
+
+      <h1><%= parking.name %></h1>
+
+      <!-- IMAGE SLIDER (NOW PROPER) -->
+      <% if (parking.images && parking.images.length) { %>
+        <div id="parkingCarousel" class="carousel slide" data-bs-ride="carousel">
+
+          <div class="carousel-indicators">
+            <% parking.images.forEach(function(_, i){ %>
+              <button type="button"
+                data-bs-target="#parkingCarousel"
+                data-bs-slide-to="<%= i %>"
+                class="<%= i === 0 ? 'active' : '' %>"></button>
+            <% }) %>
+          </div>
+
+          <div class="carousel-inner">
+            <% parking.images.forEach(function(img, i){ %>
+              <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                <img src="<%= img %>" class="d-block w-100">
+              </div>
+            <% }) %>
+          </div>
+
+          <% if (parking.images.length > 1) { %>
+            <button class="carousel-control-prev" type="button"
+              data-bs-target="#parkingCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button"
+              data-bs-target="#parkingCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          <% } %>
+        </div>
+      <% } %>
+
+      <!-- DETAILS -->
+      <div class="left-details">
+
+        <div class="label">Address</div>
+        <div class="value">
+          <% if (addressText) { %>
+            <% if (mapDest) { %>
+              <a href="https://www.google.com/maps/dir/?api=1&destination=<%= encodeURIComponent(mapDest) %>"
+                 target="_blank" style="color:#000;text-decoration:none">
+                <%= addressText %>
+              </a>
+            <% } else { %>
+              <%= addressText %>
+            <% } %>
+          <% } else { %> — <% } %>
+        </div>
+
+        <div class="details-grid">
+          <div>
+            <div class="label">Total Slots</div>
+            <div class="value"><%= parking.totalSlots ?? '-' %></div>
+          </div>
+
+          <div>
+            <div class="label">Available</div>
+            <div class="value"><%= parking.availableSlots ?? '-' %></div>
+          </div>
+
+          <div>
+            <div class="label">Pricing</div>
+            <div class="value">
+              <%= parking.pricing?.hourly ? `₹${parking.pricing.hourly}/hr` : '-' %>
+            </div>
+          </div>
+
+          <div>
+            <div class="label">Operational Hours</div>
+            <div class="value">
+              <%= parking.operationalHours
+                ? parking.operationalHours.open + ' - ' + parking.operationalHours.close
+                : '-' %>
+            </div>
+          </div>
+        </div>
+
+        <div class="label">Security</div>
+        <div class="value">
+          <%
+            let sec = [];
+            if (parking.security?.cctv) sec.push('CCTV');
+            if (parking.security?.guard) sec.push('Guard');
+            if (parking.security?.gated) sec.push('Gated');
+          %>
+          <%= sec.length ? sec.join(', ') : '-' %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- RIGHT -->
+  <div class="right-panel">
+    <form class="booking-form" action="/book" method="POST">
+      <input type="hidden" name="parkingId" value="<%= parking._id %>">
+
+      <div class="mb-3">
+        <label>Number of Slots</label>
+        <input type="number" class="form-control"
+               name="slots" min="1"
+               max="<%= parking.availableSlots %>" value="1" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Date</label>
+        <input type="date" class="form-control" name="date" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Time</label>
+        <input type="time" class="form-control" name="time" required>
+      </div>
+
+      <button class="btn btn-dark w-100">Proceed to Pay</button>
+    </form>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

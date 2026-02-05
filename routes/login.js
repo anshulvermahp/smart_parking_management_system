@@ -1,6 +1,6 @@
 const exp = require("express")
 const router = exp.Router()
-const {loginHandler,loginPage} = require("../components/login")
+const { loginHandler, loginPage } = require("../components/login")
 
 
 router.post("/login", loginHandler)

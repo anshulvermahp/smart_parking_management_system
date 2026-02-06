@@ -44,5 +44,11 @@ function loginPage(req, res) {
 module.exports =
 {
     loginHandler,
-    loginPage
+    loginPage,
+    logoutHandler
+}
+
+function logoutHandler(req, res) {
+    res.clearCookie('uuid');
+    res.redirect('/login');
 }

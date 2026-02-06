@@ -1,143 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Login | ParkSpot</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@700&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <title>Login - Parking.com</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <style>
-    * { box-sizing: border-box; font-family: 'Google Sans', Arial, sans-serif !important; font-weight: 700 !important; }
+    body {
+      font-family: 'Google Sans', sans-serif;
+      background-color: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-    body { margin: 0; background: #f5f5f5; }
-
-    /* NAVBAR */
     .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 40px;
-      background: #fff;
-      border-bottom: 1px solid #eee;
+      height: 64px;
+      flex-shrink: 0;
+      background: white;
+      border-bottom: 1px solid #e5e5e5;
+      z-index: 1000;
     }
 
-    .logo { font-size: 22px; font-weight: 700; color: #f4b400; }
-
-    .nav-right a {
-      margin-left: 20px;
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
+    .card-custom {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      padding: 2rem;
     }
 
-    .login-btn {
-      background: #f4b400;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-weight: 600;
-      color: #000;
-    }
-
-    /* HERO */
-    .hero {
-      height: calc(100vh - 70px);
-      background: url("https://images.unsplash.com/photo-1506521781263-d8422e82f27a")
-        center / cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* CARD */
-    .card {
-      background: #fff;
-      width: 380px;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    }
-
-    h2 { margin-bottom: 20px; }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px 12px;
-      margin-bottom: 14px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      width: 100%;
+    .form-control {
       padding: 12px;
-      background: #f4b400;
-      border: none;
       border-radius: 8px;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
     }
 
-    button:hover { background: #e0a800; }
-
-    .small {
-      margin-top: 14px;
-      font-size: 14px;
-      text-align: center;
+    .form-control:focus {
+      border-color: #212529;
+      box-shadow: 0 0 0 4px rgba(33, 37, 41, 0.1);
     }
 
-    .small a {
-      color: #f4b400;
-      text-decoration: none;
+    .btn-black {
+      background: #212529;
+      color: white;
+      border-radius: 8px;
+      padding: 12px;
       font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-black:hover {
+      background: black;
+      color: white;
+      transform: translateY(-1px);
     }
   </style>
 </head>
 
 <body>
 
-  <!-- NAVBAR -->
-  <div class="navbar">
-    <div class="logo">📍 ParkSpot</div>
-    <div class="nav-right">
-      <a href="/register">Register</a>
-      <a class="login-btn" href="/login">Login</a>
+  <!-- Navbar -->
+  <nav class="navbar px-3 d-flex align-items-center justify-content-between shadow-sm sticky-top">
+    <a href="/" class="d-flex align-items-center gap-2 text-decoration-none text-dark">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+        <path fill="#222" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+      </svg>
+      <span class="fw-bold fs-5">Parking.com</span>
+    </a>
+    <div class="d-flex gap-3">
+      <a href="/register" class="btn btn-sm btn-dark rounded-pill px-3">
+        Sign Up
+      </a>
+    </div>
+  </nav>
+
+  <!-- Login Content -->
+  <div class="container d-flex flex-column justify-content-center flex-grow-1 py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-8 col-lg-5 col-xl-4">
+        <div class="card-custom">
+          <div class="text-center mb-4">
+            <h3 class="fw-bold">Welcome Back</h3>
+            <p class="text-muted">Please sign in to continue</p>
+          </div>
+
+          <form action="/login" method="post">
+            <div class="mb-3">
+              <label class="form-label fw-medium">Email Address</label>
+              <input type="text" name="email" class="form-control" placeholder="name@example.com" required>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label fw-medium">Password</label>
+              <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <% if (typeof next !=='undefined' && next) { %>
+              <input type="hidden" name="next" value="<%= next %>">
+              <% } %>
+
+                <button type="submit" class="btn btn-black w-100 mb-3">
+                  Sign In <i class="bi bi-arrow-right ms-2"></i>
+                </button>
+
+                <div class="text-center">
+                  <span class="text-muted small">Don't have an account?</span>
+                  <a href="/register" class="text-decoration-none fw-bold text-dark ms-1">Create Account</a>
+                </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="card">
-
-      <h2>Login</h2>
-
-      <form action="/login" method="post">
-        <label>Email</label>
-        <input type="text" name="email" required />
-
-        <label>Password</label>
-        <input type="password" name="password" required />
-
-        <% if (typeof next !== 'undefined' && next) { %>
-          <input type="hidden" name="next" value="<%= next %>">
-        <% } %>
-
-        <button type="submit">Sign In</button>
-      </form>
-
-      <p class="small">
-        Don’t have an account?
-        <a href="/register">Register</a>
-      </p>
-
-    </div>
-  </div>
-
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

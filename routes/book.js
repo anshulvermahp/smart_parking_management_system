@@ -9,7 +9,7 @@ router.get('/', requireRole('user'), async (req, res) => {
   const { parkingId } = req.query;
   if (!parkingId) return res.status(400).send('Parking ID required');
   try {
-    const parking = await Parking.findById(parkingId);
+    const parking = await Parking.findById(parkingId).populate('owner');
     if (!parking) return res.status(404).send('Parking not found');
     res.render('book', { parking });
   } catch (err) {

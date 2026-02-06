@@ -1,289 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Book Parking Slot</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Slot - <%= parking.name %>
+  </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: 'Google Sans', sans-serif;
+      background: #f0f2f5;
+      color: #212529;
+      min-height: 100vh;
+    }
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    .navbar {
+      background: white;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      height: 70px;
+    }
 
-<style>
-html, body {
-  height: 100%;
-  margin: 0;
-}
+    .card-custom {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      overflow: hidden;
+      height: 100%;
+    }
 
-body {
-  background: #f2f2f2;
-  overflow: hidden;
-}
+    .hero-img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+    }
 
-/* ===== LAYOUT ===== */
-.page-wrapper {
-  height: 100vh;
-  display: flex;
-}
+    .section-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      color: #6c757d;
+      margin-bottom: 1rem;
+    }
 
-/* LEFT */
-.left-panel {
-  width: 65%;
-  padding: 28px;
-}
+    .owner-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #e9ecef;
+    }
 
-/* RIGHT */
-.right-panel {
-  width: 35%;
-  padding: 28px;
-  display: flex;
-  justify-content: center;   /* horizontal center */
-       /* vertical center */
-}
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      color: #495057;
+      font-size: 0.95rem;
+    }
 
+    .info-item i {
+      color: #6c757d;
+      font-size: 1.1rem;
+      width: 24px;
+      text-align: center;
+    }
 
+    .form-control,
+    .form-select {
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid #dee2e6;
+      background-color: #f8f9fa;
+    }
 
-/* ===== LEFT CARD ===== */
-.left-card {
-  background: #fff;
-  border-radius: 22px;
-  padding: 26px;
-  height: 100%;
-}
+    .form-control:focus,
+    .form-select:focus {
+      background-color: white;
+      box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+      border-color: #86b7fe;
+    }
 
-/* TITLE */
-.left-card h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #000;
-  margin-bottom: 18px;
-}
+    .btn-black {
+      background: #212529;
+      color: white;
+      border-radius: 10px;
+      padding: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
 
-/* SLIDER */
-.carousel-inner img {
-  height: 300px;
-  object-fit: cover;
-  border-radius: 18px;
-}
+    .btn-black:hover {
+      background: black;
+      color: white;
+      transform: translateY(-1px);
+    }
 
-/* DETAILS */
-.left-details {
-  margin-top: 22px;
-}
-
-.label {
-  font-weight: 600;
-  color: #000;
-  margin-top: 14px;
-}
-
-.value {
-  color: #444;
-  font-size: 0.95rem;
-}
-
-/* GRID */
-.details-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
-  margin-top: 18px;
-}
-
-/* ===== RIGHT FORM ===== */
-.booking-form {
-  width: 100%;
-  background: #fff;                /* SAME AS LEFT */
-  border-radius: 22px;
-  padding: 26px;
-}
-
-.booking-form label {
-  font-weight: 600;
-}
-
-.booking-form button {
-  background: #111;
-  border: none;
-  padding: 14px;
-  font-weight: 600;
-}
-
-/* MOBILE */
-@media (max-width: 991px) {
-  body { overflow: auto; }
-
-  .page-wrapper {
-    flex-direction: column;
-    height: auto;
-  }
-
-
-
-  .left-panel,
-  .right-panel {
-    width: 100%;
-  }
-
-  .right-panel {
-    align-items: stretch;
-  }
-}
-</style>
+    /* Mobile Adjustments */
+    @media (max-width: 991px) {
+      .hero-img {
+        height: 200px;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <nav class="navbar navbar-expand-lg sticky-top px-4">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+          <path fill="#222" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+        </svg>
+        <span>Parking.com</span>
+      </a>
+      <div class="ms-auto">
+        <a href="/" class="btn btn-sm btn-light border fw-medium">Cancel</a>
+      </div>
+    </div>
+  </nav>
 
-<%
-  let addressText = '';
-  let mapDest = '';
+  <div class="container py-4 py-lg-5">
+    <div class="row g-4 justify-content-center">
 
-  if (parking.address) {
-    addressText = [
-      parking.address.street,
-      parking.address.city,
-      parking.address.state,
-      parking.address.country
-    ].filter(Boolean).join(', ');
-  }
-
-  if (parking.location?.lat && parking.location?.lng) {
-    mapDest = parking.location.lat + ',' + parking.location.lng;
-  } else if (parking.coordinates?.lat && parking.coordinates?.lng) {
-    mapDest = parking.coordinates.lat + ',' + parking.coordinates.lng;
-  }
-%>
-
-<div class="page-wrapper">
-
-  <!-- LEFT -->
-  <div class="left-panel">
-    <div class="left-card">
-
-      <h1><%= parking.name %></h1>
-
-      <!-- IMAGE SLIDER (NOW PROPER) -->
-      <% if (parking.images && parking.images.length) { %>
-        <div id="parkingCarousel" class="carousel slide" data-bs-ride="carousel">
-
-          <div class="carousel-indicators">
-            <% parking.images.forEach(function(_, i){ %>
-              <button type="button"
-                data-bs-target="#parkingCarousel"
-                data-bs-slide-to="<%= i %>"
-                class="<%= i === 0 ? 'active' : '' %>"></button>
-            <% }) %>
-          </div>
-
-          <div class="carousel-inner">
-            <% parking.images.forEach(function(img, i){ %>
-              <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
-                <img src="<%= img %>" class="d-block w-100">
-              </div>
-            <% }) %>
-          </div>
-
-          <% if (parking.images.length > 1) { %>
-            <button class="carousel-control-prev" type="button"
-              data-bs-target="#parkingCarousel" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button"
-              data-bs-target="#parkingCarousel" data-bs-slide="next">
-              <span class="carousel-control-next-icon"></span>
-            </button>
-          <% } %>
-        </div>
-      <% } %>
-
-      <!-- DETAILS -->
-      <div class="left-details">
-
-        <div class="label">Address</div>
-        <div class="value">
-          <% if (addressText) { %>
-            <% if (mapDest) { %>
-              <a href="https://www.google.com/maps/dir/?api=1&destination=<%= encodeURIComponent(mapDest) %>"
-                 target="_blank" style="color:#000;text-decoration:none">
-                <%= addressText %>
-              </a>
+      <!-- Left Column: Parking & Owner Details -->
+      <div class="col-lg-7">
+        <div class="card-custom">
+          <% if (parking.images && parking.images.length> 0) { %>
+            <img src="<%= parking.images[0] %>" class="hero-img" alt="<%= parking.name %>">
             <% } else { %>
-              <%= addressText %>
-            <% } %>
-          <% } else { %> — <% } %>
+              <div class="d-flex align-items-center justify-content-center bg-light" style="height: 240px;">
+                <span class="text-muted">No Image Available</span>
+              </div>
+              <% } %>
+
+                <div class="p-4">
+                  <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                      <h2 class="fw-bold mb-1">
+                        <%= parking.name %>
+                      </h2>
+                      <p class="text-muted mb-0">
+                        <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                        <%= parking.address.street %>, <%= parking.address.city %>
+                      </p>
+                    </div>
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-3">
+                      Active
+                    </span>
+                  </div>
+
+                  <hr class="opacity-10 my-4">
+
+                  <div class="row g-4">
+                    <div class="col-md-6">
+                      <h6 class="section-title">Parking Details</h6>
+                      <div class="info-item">
+                        <i class="bi bi-currency-rupee"></i>
+                        <span class="fw-bold">₹<%= parking.pricing.hourly %>/hr</span>
+                      </div>
+                      <div class="info-item">
+                        <i class="bi bi-clock"></i>
+                        <span>
+                          <%= parking.operationalHours.open %> - <%= parking.operationalHours.close %>
+                        </span>
+                      </div>
+                      <div class="info-item">
+                        <i class="bi bi-shield-check"></i>
+                        <span>
+                          <% let sec=[]; if(parking.security?.cctv) sec.push("CCTV"); if(parking.security?.guard)
+                            sec.push("Guard"); if(parking.security?.gated) sec.push("Gated"); %>
+                            <%= sec.length ? sec.join(", ") : " Standard Security" %>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <h6 class="section-title">Owner Information</h6>
+                      <% if (parking.owner) { %>
+                        <div class="d-flex align-items-center gap-3 bg-light p-3 rounded-3 border">
+                          <% if (parking.owner.profilePicture) { %>
+                            <img src="<%= parking.owner.profilePicture %>" class="owner-avatar" alt="Owner">
+                            <% } else { %>
+                              <div
+                                class="owner-avatar d-flex align-items-center justify-content-center bg-white border text-muted">
+                                <i class="bi bi-person-fill fs-5"></i>
+                              </div>
+                              <% } %>
+                                <div>
+                                  <div class="fw-bold text-dark">
+                                    <%= parking.owner.username %>
+                                  </div>
+                                  <div class="small text-muted">Verified Owner</div>
+                                </div>
+                        </div>
+                        <div class="mt-3 small text-muted">
+                          <div class="d-flex align-items-center gap-2 mb-1">
+                            <i class="bi bi-telephone"></i>
+                            <span>
+                              <%= parking.owner.contactNumber || 'Contact Hidden' %>
+                            </span>
+                          </div>
+                          <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-envelope"></i>
+                            <span>
+                              <%= parking.owner.email || 'Email Hidden' %>
+                            </span>
+                          </div>
+                        </div>
+                        <% } else { %>
+                          <div class="text-muted fst-italic">Owner details not available</div>
+                          <% } %>
+                    </div>
+                  </div>
+
+                  <% if (parking.amenities && parking.amenities.length> 0) { %>
+                    <div class="mt-4">
+                      <h6 class="section-title">Amenities</h6>
+                      <div class="d-flex flex-wrap gap-2">
+                        <% parking.amenities.forEach(am=> { %>
+                          <span class="badge bg-light text-dark border fw-normal px-3 py-2 rounded-pill">
+                            <%= am %>
+                          </span>
+                          <% }) %>
+                      </div>
+                    </div>
+                    <% } %>
+                </div>
         </div>
+      </div>
 
-        <div class="details-grid">
-          <div>
-            <div class="label">Total Slots</div>
-            <div class="value"><%= parking.totalSlots ?? '-' %></div>
-          </div>
+      <!-- Right Column: Booking Form -->
+      <div class="col-lg-5">
+        <div class="card-custom p-4 sticky-top" style="top: 90px; z-index: 1;">
+          <h4 class="fw-bold mb-4">Book Your Slot</h4>
 
-          <div>
-            <div class="label">Available</div>
-            <div class="value"><%= parking.availableSlots ?? '-' %></div>
-          </div>
+          <form action="/book" method="POST">
+            <input type="hidden" name="parkingId" value="<%= parking._id %>">
 
-          <div>
-            <div class="label">Pricing</div>
-            <div class="value">
-              <%= parking.pricing?.hourly ? `₹${parking.pricing.hourly}/hr` : '-' %>
+            <div class="mb-3">
+              <label class="form-label fw-medium text-muted small text-uppercase">Select Slots</label>
+              <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-p-square text-muted"></i></span>
+                <input type="number" class="form-control border-start-0 ps-0" name="slots" min="1"
+                  max="<%= parking.availableSlots %>" value="1" required placeholder="Number of slots">
+              </div>
+              <div class="form-text text-success small">
+                <i class="bi bi-check-circle-fill me-1"></i>
+                <%= parking.availableSlots %> slots currently available
+              </div>
             </div>
-          </div>
 
-          <div>
-            <div class="label">Operational Hours</div>
-            <div class="value">
-              <%= parking.operationalHours
-                ? parking.operationalHours.open + ' - ' + parking.operationalHours.close
-                : '-' %>
+            <div class="row g-3 mb-4">
+              <div class="col-6">
+                <label class="form-label fw-medium text-muted small text-uppercase">Date</label>
+                <input type="date" class="form-control" name="date" required id="dateInput">
+              </div>
+              <div class="col-6">
+                <label class="form-label fw-medium text-muted small text-uppercase">Time</label>
+                <input type="time" class="form-control" name="time" required>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div class="label">Security</div>
-        <div class="value">
-          <%
-            let sec = [];
-            if (parking.security?.cctv) sec.push('CCTV');
-            if (parking.security?.guard) sec.push('Guard');
-            if (parking.security?.gated) sec.push('Gated');
-          %>
-          <%= sec.length ? sec.join(', ') : '-' %>
-        </div>
+            <div class="bg-light p-3 rounded-3 mb-4 border border-dashed">
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-muted">Total Amount</span>
+                <h3 class="mb-0 fw-bold">₹<span id="totalAmount">
+                    <%= parking.pricing.hourly %>
+                  </span></h3>
+              </div>
+              <div class="small text-muted text-end mt-1">Based on hourly rate</div>
+            </div>
 
+            <button type="submit" class="btn btn-black w-100 shadow-sm">
+              Confirm & Pay <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
+  <script>
+    // Simple script to update price dynamically
+    const pricePerHour = Number('<%= parking.pricing.hourly %>');
+    const slotsInput = document.querySelector('input[name="slots"]');
+    const amountDisplay = document.getElementById('totalAmount');
 
-  <!-- RIGHT -->
-  <div class="right-panel">
-    <form class="booking-form" action="/book" method="POST">
-      <input type="hidden" name="parkingId" value="<%= parking._id %>">
+    slotsInput.addEventListener('input', function () {
+      const slots = parseInt(this.value) || 0;
+      const total = slots * pricePerHour;
+      amountDisplay.textContent = total;
+    });
 
-      <div class="mb-3">
-        <label>Number of Slots</label>
-        <input type="number" class="form-control"
-               name="slots" min="1"
-               max="<%= parking.availableSlots %>" value="1" required>
-      </div>
-
-      <div class="mb-3">
-        <label>Date</label>
-        <input type="date" class="form-control" name="date" required>
-      </div>
-
-      <div class="mb-3">
-        <label>Time</label>
-        <input type="time" class="form-control" name="time" required>
-      </div>
-
-      <button class="btn btn-dark w-100">Proceed to Pay</button>
-    </form>
-  </div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    // Set min date to today
+    const dateInput = document.getElementById('dateInput');
+    dateInput.min = new Date().toISOString().split('T')[0];
+  </script>
 </body>
+
 </html>

@@ -2,6 +2,7 @@ const exp = require("express");
 const router = exp.Router();
 const Parking = require("../models/parking");
 const Owners = require("../models/owner");
+const Booking = require("../models/booking");
 
 router.get("/", async (req, res) => {
     try {
@@ -37,7 +38,33 @@ router.get("/:id", async (req, res) => {
         // Security check: ensure the parking belongs to the logged-in owner
         // (Optional but good practice, though we just need to show it for now)
 
-        res.render("viewParking", { parking });
+        // Calculate mapQuery for the view
+        let mapQuery = "";
+        if (parking.latitude && parking.longitude && (parking.latitude !== 0 || parking.longitude !== 0)) {
+            mapQuery = parking.latitude + "," + parking.longitude;
+        } else if (parking.address) {
+            const addr = parking.address;
+            mapQuery = `${addr.street || ''}, ${addr.city || ''}, ${addr.state || ''}, ${addr.zip || ''}`;
+        }
+
+        // Fetch bookings for this parking
+        const bookings = await Booking.find({ parkingId: parkingId })
+            .populate('user')
+            .sort({ createdAt: -1 })
+            .lean();
+
+        // Calculate Revenue (only from successful payments and non-cancelled/rejected bookings)
+        // Adjust logic based on your payment flow. Assuming 'success' payment means paid.
+        // If status is 'pending', money might be held or not charged yet depending on flow, 
+        // but let's assume 'success' payment status + non-cancelled status = revenue.
+        const revenue = bookings.reduce((acc, b) => {
+            if (b.paymentStatus === 'success' && b.status !== 'cancelled' && b.status !== 'rejected') {
+                return acc + b.amount;
+            }
+            return acc;
+        }, 0);
+
+        res.render("viewParking", { parking, mapQuery, bookings, revenue });
     } catch (err) {
         console.error("Error fetching parking details:", err);
         res.status(500).send("Server Error");
@@ -191,6 +218,29 @@ router.post("/:id/delete", async (req, res) => {
         res.redirect("/dashboard");
     } catch (err) {
         console.error("Error deleting parking:", err);
+        res.status(500).send("Server Error");
+    }
+});
+
+// Route to accept/reject booking
+router.post("/:id/booking/:bookingId/status", async (req, res) => {
+    try {
+        const { id, bookingId } = req.params;
+        const { status } = req.body; // 'confirmed' or 'cancelled'
+
+        if (!['confirmed', 'cancelled'].includes(status)) {
+            return res.status(400).send("Invalid status");
+        }
+
+        const booking = await Booking.findById(bookingId);
+        if (!booking) return res.status(404).send("Booking not found");
+
+        booking.status = status;
+        await booking.save();
+
+        res.redirect(`/dashboard/${id}`);
+    } catch (err) {
+        console.error("Error updating booking status:", err);
         res.status(500).send("Server Error");
     }
 });

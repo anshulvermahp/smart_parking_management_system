@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Bookings</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        /* Mobile toggle fix */
+        .navbar-toggler {
+            border: none;
+            padding: 0;
+            background: transparent;
+            transition: transform 0.2s;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .navbar-toggler:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .navbar-collapse {
+                background: #ffffff;
+                border-radius: 16px;
+                padding: 1.5rem;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+                position: absolute;
+                top: 100%;
+                left: 1rem;
+                right: 1rem;
+                z-index: 1000;
+            }
+
+            .navbar-collapse .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <!-- Navbar (Matched with Home & Map Page) -->
+    <nav class="navbar navbar-expand-md px-3 shadow-sm bg-white sticky-top" style="z-index: 1000;">
+        <div class="container-fluid">
+            <a href="/" class="navbar-brand d-flex align-items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                    <path fill="#212529" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                </svg>
+                <span class="fw-bold fs-5 text-dark">Parking.com</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bookingsNav"
+                aria-controls="bookingsNav" aria-expanded="false" aria-label="Toggle navigation">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                    stroke="#212529" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" y1="12" x2="20" y2="12"></line>
+                    <line x1="4" y1="6" x2="20" y2="6"></line>
+                    <line x1="4" y1="18" x2="20" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="collapse navbar-collapse" id="bookingsNav">
+                <div class="navbar-nav ms-auto gap-2 align-items-center mt-3 mt-md-0">
+                    <a href="/viewBooking" class="btn btn-sm btn-dark border-0 fw-medium">My Bookings</a>
+                    <a href="/profile"
+                        class="btn btn-sm btn-outline-dark rounded-pill px-4 fw-bold d-flex align-items-center justify-content-center gap-2">
+                        <i class="bi bi-person-circle"></i> Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4 py-lg-5">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h2 class="fw-bold mb-0">Your Bookings</h2>
+            <a href="/map" class="btn btn-primary d-none d-sm-inline-block rounded-pill px-4">
+                <i class="bi bi-plus-lg me-1"></i> New Booking
+            </a>
+        </div>
+
+        <% if (typeof bookings !=='undefined' && bookings.length> 0) { %>
+            <div class="row g-4">
+                <% bookings.forEach(booking=> { %>
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <div class="card h-100 border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                            <!-- Map Header -->
+                            <div class="position-relative bg-light" style="height: 160px;">
+                                <% if(booking.parkingId && booking.parkingId.latitude && booking.parkingId.longitude) {
+                                    %>
+                                    <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0"
+                                        marginwidth="0"
+                                        src="https://maps.google.com/maps?q=<%= booking.parkingId.latitude %>,<%= booking.parkingId.longitude %>&hl=en&z=14&output=embed"
+                                        style="filter: grayscale(0.3);">
+                                    </iframe>
+                                    <a href="https://www.google.com/maps/dir/?api=1&destination=<%= booking.parkingId.latitude %>,<%= booking.parkingId.longitude %>"
+                                        target="_blank"
+                                        class="btn btn-sm btn-light position-absolute bottom-0 end-0 m-2 shadow-sm fw-medium rounded-pill"
+                                        style="font-size: 0.75rem;">
+                                        <i class="bi bi-cursor-fill text-primary me-1"></i> Directions
+                                    </a>
+                                    <% } else { %>
+                                        <div
+                                            class="w-100 h-100 d-flex align-items-center justify-content-center text-muted">
+                                            <i class="bi bi-map-fill fs-1 opacity-25"></i>
+                                        </div>
+                                        <% } %>
+
+                                            <!-- Status Badge Overlay -->
+                                            <div class="position-absolute top-0 start-0 m-2">
+                                                <% if (booking.status==='confirmed' ) { %>
+                                                    <span class="badge bg-success shadow-sm">Confirmed</span>
+                                                    <% } else if (booking.status==='cancelled' ) { %>
+                                                        <span class="badge bg-danger shadow-sm">Cancelled</span>
+                                                        <% } else { %>
+                                                            <span
+                                                                class="badge bg-warning text-dark shadow-sm">Pending</span>
+                                                            <% } %>
+                                            </div>
+                            </div>
+
+                            <div class="card-body p-3 p-lg-4 d-flex flex-column">
+                                <div class="mb-3">
+                                    <h5 class="card-title fw-bold text-truncate mb-1"
+                                        title="<%= booking.parkingId ? booking.parkingId.name : 'Unknown' %>">
+                                        <%= booking.parkingId ? booking.parkingId.name : 'Unknown Parking' %>
+                                    </h5>
+                                    <p class="card-text small text-muted text-truncate mb-0">
+                                        <i class="bi bi-geo-alt me-1"></i>
+                                        <% if(booking.parkingId && booking.parkingId.address) { %>
+                                            <%= booking.parkingId.address.street %>, <%= booking.parkingId.address.city
+                                                    %>
+                                                    <% } else { %>
+                                                        Location N/A
+                                                        <% } %>
+                                    </p>
+                                </div>
+
+                                <div class="bg-light rounded-3 p-3 mb-3 small">
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <span class="text-muted d-block text-uppercase"
+                                                style="font-size: 0.7rem; letter-spacing: 0.5px;">Date</span>
+                                            <span class="fw-semibold">
+                                                <%= booking.date %>
+                                            </span>
+                                        </div>
+                                        <div class="col-6">
+                                            <span class="text-muted d-block text-uppercase"
+                                                style="font-size: 0.7rem; letter-spacing: 0.5px;">Time</span>
+                                            <span class="fw-semibold">
+                                                <%= booking.time %>
+                                            </span>
+                                        </div>
+                                        <div class="col-6">
+                                            <span class="text-muted d-block text-uppercase"
+                                                style="font-size: 0.7rem; letter-spacing: 0.5px;">Slots</span>
+                                            <span class="fw-semibold">
+                                                <%= booking.slots %>
+                                            </span>
+                                        </div>
+                                        <div class="col-6">
+                                            <span class="text-muted d-block text-uppercase"
+                                                style="font-size: 0.7rem; letter-spacing: 0.5px;">Total</span>
+                                            <span class="fw-bold text-primary">₹<%= booking.amount %></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-auto pt-2 border-top">
+                                    <div class="d-flex justify-content-between align-items-center small mb-3">
+                                        <span class="text-muted">Payment</span>
+                                        <span
+                                            class="badge <%= booking.paymentStatus === 'success' ? 'bg-success bg-opacity-10 text-success' : 'bg-warning bg-opacity-10 text-warning' %> border border-<%= booking.paymentStatus === 'success' ? 'success' : 'warning' %>">
+                                            <%= booking.paymentStatus %>
+                                        </span>
+                                    </div>
+
+                                    <!-- Action Buttons -->
+                                    <% if (booking.status !=='cancelled' ) { %>
+                                        <form action="/viewBooking/cancel" method="POST"
+                                            onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                                            <input type="hidden" name="bookingId" value="<%= booking._id %>">
+                                            <button type="submit" class="btn btn-outline-danger w-100 btn-sm rounded-3">
+                                                Cancel Booking
+                                            </button>
+                                        </form>
+                                        <% } else { %>
+                                            <button class="btn btn-light w-100 btn-sm rounded-3 text-muted" disabled>
+                                                Booking Cancelled
+                                            </button>
+                                            <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+            <% } else { %>
+                <div class="text-center py-5">
+                    <div class="mb-3 text-muted">
+                        <i class="bi bi-calendar-x" style="font-size: 3rem;"></i>
+                    </div>
+                    <h5 class="fw-bold">No bookings found</h5>
+                    <p class="text-muted mb-4">You haven't made any parking reservations yet.</p>
+                    <a href="/map" class="btn btn-primary px-4 rounded-pill">Find Parking</a>
+                </div>
+                <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

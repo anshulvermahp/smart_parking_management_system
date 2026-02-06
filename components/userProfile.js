@@ -22,7 +22,7 @@ async function handleUserProfilePage(req, res) {
             }
         }
 
-        const bookings = await Booking.find({ user: userId });
+        const bookings = await Booking.find({ user: userId }).populate('parkingId');
         res.render("profile", { user, bookings });
     } catch (error) {
         console.error("Error fetching user profile:", error);

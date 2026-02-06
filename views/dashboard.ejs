@@ -4,88 +4,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Dashboard - Parking.com</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --navbar-height: 70px;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            color: #212529;
+        }
+
+        /* Navbar */
+        .navbar {
+            height: var(--navbar-height);
+            background: white;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+
+        /* Cards */
+        .parking-card {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .parking-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-img-wrapper {
+            position: relative;
+            padding-top: 56.25%;
+            /* 16:9 Aspect Ratio */
+            background: #e9ecef;
+            overflow: hidden;
+        }
+
+        .card-img-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .info-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .info-value {
+            font-weight: 700;
+            color: #212529;
+        }
+
+        /* Buttons & Controls */
+        .btn-custom-dark {
+            background: #212529;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-custom-dark:hover {
+            background: #000;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-custom-outline {
+            background: transparent;
+            border: 1px solid #dee2e6;
+            color: #212529;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-custom-outline:hover {
+            background: #f8f9fa;
+            border-color: #ccedff;
+            color: #0d6efd;
+            /* Subtle interaction color */
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            border: 1px dashed #dee2e6;
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .header-actions {
+                width: 100%;
+                display: flex;
+                gap: 0.5rem;
+            }
+
+            .header-actions .btn {
+                flex: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg py-3">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg px-4 sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
                     <path fill="#222" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
                 </svg>
-                <span style="margin-left:10px;color:#222;font-weight:700;">Parking.com</span>
+                <span>Parking.com</span>
             </a>
+
             <div class="ms-auto">
-                <a class="btn btn-outline-dark" href="/map">Find parking</a>
+                <!-- Desktop Menu -->
+                <div class="d-none d-lg-flex align-items-center gap-3">
+                    <a href="/owners/profile" class="btn btn-sm btn-link text-decoration-none text-dark fw-medium">
+                        <i class="bi bi-person-circle me-1"></i> Profile
+                    </a>
+                    <div class="vr mx-1"></div>
+                    <a href="/logout" class="btn btn-sm btn-link text-decoration-none text-muted fw-medium">
+                        Log Out
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <div class="d-lg-none dropdown">
+                    <button class="btn btn-light rounded-circle shadow-sm" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-2"
+                        style="border-radius: 12px; min-width: 200px;">
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 mb-1" href="/owners/profile">
+                                <i class="bi bi-person me-2"></i> My Profile
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 mb-1" href="/map">
+                                <i class="bi bi-map me-2"></i> Find Parking
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider opacity-10 my-1">
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 py-2 text-danger" href="/logout">
+                                <i class="bi bi-box-arrow-right me-2"></i> Log Out
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Owner Dashboard</h1>
+    <!-- Main Content -->
+    <div class="container py-5">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-5 page-header">
             <div>
-                <a href="/owners/profile" class="btn btn-outline-dark me-2">Profile</a>
-                <a href="/admin/add-parking" class="btn btn-primary">Add Parking</a>
-                <a href="/logout" class="btn btn-danger ms-2">Logout</a>
+                <h2 class="fw-bold mb-1">Dashboard</h2>
+                <p class="text-muted mb-0">Overview of your parking locations</p>
+            </div>
+            <div class="header-actions">
+                <a href="/admin/add-parking"
+                    class="btn btn-custom-dark shadow-sm d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-plus-lg"></i>
+                    <span>Add Location</span>
+                </a>
             </div>
         </div>
 
-        <h3>My Parking Locations</h3>
-        <div class="row mt-3">
+        <!-- Grid -->
+        <div class="row g-4">
             <% if (parkings && parkings.length> 0) { %>
                 <% parkings.forEach(function(p) { %>
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card h-100 shadow-sm">
-                            <% if (p.images && p.images.length> 0) { %>
-                                <img src="<%= p.images[0] %>" class="card-img-top" alt="<%= p.name %>"
-                                    style="height: 200px; object-fit: cover;">
-                                <% } else { %>
-                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
-                                        style="height: 200px;">
-                                        <span class="text-muted">No Image</span>
-                                    </div>
-                                    <% } %>
-                                        <div class="card-body">
-                                            <h5 class="card-title">
-                                                <%= p.name %>
-                                            </h5>
-                                            <p class="card-text text-muted mb-2">
-                                                <small>
-                                                    <%= p.address.street %>, <%= p.address.city %>
-                                                </small>
-                                            </p>
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <span><strong>Total Slots:</strong>
-                                                    <%= p.totalSlots %>
-                                                </span>
-                                                <span><strong>Available:</strong>
-                                                    <%= p.availableSlots %>
-                                                </span>
-                                            </div>
-                                            <div class="d-flex justify-content-between">
-                                                <span><strong>Hourly:</strong> ₹<%= p.pricing.hourly %></span>
-                                            </div>
-                                            <div class="view">
-                                                <a href="/dashboard/<%= p._id %>" class="btn btn-primary"
-                                                    style="text-decoration: none; color: #fff;">View</a>
-                                            </div>
+                    <div class="col-md-6 col-lg-4 col-xl-3">
+                        <div class="parking-card shadow-sm">
+                            <div class="card-img-wrapper">
+                                <% if (p.images && p.images.length> 0) { %>
+                                    <img src="<%= p.images[0] %>" class="card-img-top" alt="<%= p.name %>">
+                                    <% } else { %>
+                                        <div
+                                            class="card-img-top d-flex align-items-center justify-content-center bg-light text-muted">
+                                            <i class="bi bi-image fs-1 opacity-25"></i>
                                         </div>
+                                        <% } %>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <h5 class="fw-bold mb-1 text-truncate" title="<%= p.name %>">
+                                        <%= p.name %>
+                                    </h5>
+                                    <p class="text-muted small mb-0 text-truncate">
+                                        <i class="bi bi-geo-alt me-1"></i>
+                                        <%= p.address.city || 'Unknown City' %>
+                                    </p>
+                                </div>
+
+                                <div class="bg-light rounded-3 p-3 mb-4">
+                                    <div class="info-row">
+                                        <span class="info-label">Available Slots</span>
+                                        <span class="info-value text-success">
+                                            <%= p.totalSlots - (p.bookedSlots || 0) %> / <%= p.totalSlots %>
+                                        </span>
+                                    </div>
+                                    <div class="info-row mb-0">
+                                        <span class="info-label">Rate</span>
+                                        <span class="info-value">₹<%= p.pricing.hourly %>/hr</span>
+                                    </div>
+                                </div>
+
+                                <a href="/dashboard/<%= p._id %>" class="btn btn-custom-outline w-100 mt-auto">
+                                    Manage Details
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <% }); %>
                         <% } else { %>
                             <div class="col-12">
-                                <div class="alert alert-info">
-                                    You haven't added any parking locations yet. <a href="/admin/add-parking"
-                                        class="alert-link">Add your first parking</a>.
+                                <div class="empty-state">
+                                    <div class="mb-3">
+                                        <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center"
+                                            style="width: 80px; height: 80px;">
+                                            <i class="bi bi-p-square text-muted fs-1"></i>
+                                        </div>
+                                    </div>
+                                    <h4 class="fw-bold">No parking locations yet</h4>
+                                    <p class="text-muted mb-4">Start earning by listing your empty parking space.</p>
+                                    <a href="/admin/add-parking" class="btn btn-custom-dark">
+                                        Create First Listing
+                                    </a>
                                 </div>
                             </div>
                             <% } %>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

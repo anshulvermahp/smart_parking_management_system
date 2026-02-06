@@ -1,324 +1,542 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Parking Map</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Map - Parking.com</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-<style>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@700&display=swap');
-* {
-  box-sizing: border-box;
-  font-family: 'Google Sans', Arial, sans-serif !important;
-  font-weight: 700 !important;
-}
+  <style>
+    body {
+      font-family: 'Google Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #fff;
+    }
 
-body {
-  margin: 0;
-  background: #f5f5f5;
-  color: #111;
-  font-family: 'Google Sans', Arial, sans-serif !important;
-  font-weight: 700 !important;
-}
+    /* Navbar */
+    .navbar {
+      height: 64px;
+      flex-shrink: 0;
+      background: white;
+      border-bottom: 1px solid #e5e5e5;
+      z-index: 1000;
+    }
 
-/* HEADER */
-.header {
-  height: 64px;
-  background: #fff;
-  border-bottom: 1px solid #e5e5e5;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-}
-.logo {
-  font-weight: 700;
-  font-size: 20px;
-}
+    /* Main Layout */
+    .layout {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      position: relative;
+    }
 
-/* LAYOUT */
-.layout {
-  display: flex;
-  height: calc(100vh - 64px - 48px);
-}
+    /* Sidebar List */
+    .sidebar {
+      width: 400px;
+      background: #fff;
+      border-right: 1px solid #e5e5e5;
+      display: flex;
+      flex-direction: column;
+      z-index: 500;
+    }
 
-/* LEFT LIST */
-.pakingsInfo {
-  width: 380px;
-  background: #fff;
-  border-right: 1px solid #e5e5e5;
-  overflow-y: auto;
-  padding: 12px;
-}
+    .sidebar-header {
+      padding: 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
 
-/* CARD */
-.parking-card {
-  display: flex;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 10px;
-  justify-content: center;
-  align-items: center;
-  background: #fff;
-  margin-bottom: 14px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
-}
-.parking-card img {
-  width: 72px;
-  height: 72px;
-  object-fit: cover;
-  border-radius: 6px;
-}
-.parking-info h4 {
-  margin: 0 0 4px;
-  font-size: 15px;
-  font-weight: 700;
-}
-.parking-info p {
-  margin: 2px 0;
-  font-size: 13px;
-  color: #555;
-}
-.price {
-  font-weight: 700;
-  margin: 6px 0;
-}
-.card-actions {
-  display: flex;
-  gap: 8px;
-}
-.btn-details {
-  background: #fff;
-  color: #000;
-  border: 1px solid #ddd;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-}
+    .parkings-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
 
-.btn-details:hover {
-  background: #f5f5f5;
-}
+    /* Parking Card */
+    .parking-card {
+      display: flex;
+      gap: 16px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid #f0f0f0;
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
 
-.btn-reserve {
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-}
+    .parking-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      border-color: #e0e0e0;
+    }
 
-.btn-reserve:hover {
-  background: #111;
-}
+    .parking-card.active {
+      border-color: #212529;
+      background-color: #f8f9fa;
+    }
 
+    .card-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
 
-/* MAP */
-#map {
-  flex: 1;
-}
+    .card-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-/* POPUP (Parking.com style) */
-.leaflet-popup-content {
-  margin: 0;
-}
-.popup-card {
-  width: 240px;
-}
-.popup-card img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 8px 8px 0 0;
-}
-.popup-body {
-  padding: 10px;
-}
-.popup-body h4 {
-  margin: 0 0 4px;
-  font-size: 14px;
-  font-weight: 700;
-}
-.popup-body p {
-  margin: 2px 0;
-  font-size: 12px;
-  color: #555;
-}
-.popup-actions a {
-  flex: 1;
-  text-align: center;
-  text-decoration: none;
-  padding: 6px 8px;
-  font-size: 12px;
-  font-weight: 600;
-  border-radius: 6px;
-}
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #212529;
+    }
 
-/* Directions = secondary */
-.popup-details {
-  background: #fff;
-  color: #000;
-  border: 1px solid #ddd;
-}
+    .card-meta {
+      font-size: 13px;
+      color: #6c757d;
+      margin-bottom: 8px;
+    }
 
-.popup-details:hover {
-  background: #f5f5f5;
-}
+    .card-meta i {
+      font-size: 12px;
+      margin-right: 4px;
+    }
 
-/* Reserve = primary */
-.popup-reserve {
-  background: #000;
-  color: #fff;
-}
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-.popup-reserve:hover {
-  background: #111;
-}
+    .price-tag {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #212529;
+    }
 
+    /* Map Container */
+    #map {
+      flex: 1;
+      height: 100%;
+      background: #f0f0f0;
+    }
 
+    /* Leaflet Customization */
+    .price-marker-icon {
+      background: transparent;
+      border: none;
+    }
 
-</style>
+    .price-chip {
+      background: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      border: 1px solid #e5e5e5;
+      white-space: nowrap;
+      color: #212529;
+      text-align: center;
+      transition: transform 0.2s;
+      width: fit-content;
+      transform: translateX(-50%);
+    }
+
+    .price-chip:hover {
+      background: #212529;
+      color: white;
+      border-color: #212529;
+      transform: translateX(-50%) scale(1.1);
+      z-index: 1000;
+    }
+
+    /* Popup Styling */
+    .leaflet-popup-content-wrapper {
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .leaflet-popup-content {
+      margin: 0;
+      width: 260px !important;
+    }
+
+    .popup-header-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+    }
+
+    .popup-body {
+      padding: 16px;
+    }
+
+    .btn-reserve {
+      background: #212529;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      width: 100%;
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-reserve:hover {
+      background: black;
+      color: white;
+    }
+
+    /* Skeleton Loading */
+    .skeleton-card {
+      display: flex;
+      gap: 16px;
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      background: #fff;
+      border: 1px solid #f0f0f0;
+    }
+
+    .skeleton-box {
+      background: #f0f0f0;
+      border-radius: 4px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 0.6;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.6;
+      }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .navbar {
+        height: auto !important;
+        /* Allow growing for search bar */
+      }
+
+      body {
+        height: 100vh;
+        /* Force full height */
+        overflow: hidden;
+        /* Prevent body scroll, use inner scroll */
+      }
+
+      .layout {
+        flex-direction: column;
+        height: calc(100% - 64px);
+        /* Ideally calc(100vh - navheight), but navheight varies. 
+           We can rely on flex to fill remaining space if body is flex column */
+        flex: 1;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: 50%;
+        /* Bottom half */
+        border-right: none;
+        border-top: 1px solid #e5e5e5;
+        order: 2;
+        /* List below */
+      }
+
+      #map {
+        height: 50% !important;
+        /* Top half */
+        width: 100%;
+        flex: none;
+        order: 1;
+        /* Map above */
+      }
+
+      .collapse.show {
+        /* Ensure overlay or push content if needed, but flex handles it */
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="header">
-  <div class="logo">Parking.com</div>
-</div>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-md px-3 shadow-sm bg-white">
+    <div class="container-fluid">
+      <a href="/" class="navbar-brand d-flex align-items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+          <path fill="#212529" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+        </svg>
+        <span class="fw-bold fs-5 text-dark">Parking.com</span>
+      </a>
 
-<div class="layout">
-  <div class="pakingsInfo"></div>
-  <div id="map"></div>
-</div>
+      <button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#mapNav"
+        aria-controls="mapNav" aria-expanded="false" aria-label="Toggle navigation">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#212529"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="6" x2="20" y2="6"></line>
+          <line x1="4" y1="18" x2="20" y2="18"></line>
+        </svg>
+      </button>
 
-<!-- <div class="footer">
-  The Apps · Privacy policy · Terms of service · Contact us
-</div> -->
+      <div class="collapse navbar-collapse" id="mapNav">
 
-<script>
-let map;
-let parkingMarkers = {};
+        <!-- Search Bar -->
+        <form class="d-flex w-100 mx-md-4 my-3 my-md-0" role="search" action="/map" method="GET"
+          style="max-width: 600px;">
+          <div class="input-group w-100 shadow-sm rounded-pill overflow-hidden">
+            <span class="input-group-text bg-light border-0 ps-3"><i class="bi bi-search text-muted"></i></span>
+            <input class="form-control bg-light border-0 shadow-none" type="search" name="area"
+              placeholder="Search for a city or area..." aria-label="Search"
+              value="<%= typeof area !== 'undefined' ? area : '' %>">
+            <button class="btn btn-dark px-4" type="submit">Go</button>
+          </div>
+        </form>
 
-function priceMarker(price) {
-  return L.divIcon({
-    className: '',
-    html: `
-      <div style="
-        background:#fff;
-        padding:6px 10px;
-        border-radius:18px;
-        font-weight:700;
-        box-shadow:0 2px 8px rgba(0,0,0,.25);
-        border:1px solid #ddd;
-      ">
-        ₹${price}
+        <div class="navbar-nav ms-auto gap-2 align-items-center mt-3 mt-md-0">
+          <a href="/viewBooking" class="btn btn-sm btn-outline-dark border-0 fw-bold w-100 text-center">My Bookings</a>
+          <a href="/profile"
+            class="btn btn-sm btn-dark rounded-pill px-4 fw-bold w-100 d-flex align-items-center justify-content-center gap-2">
+            <i class="bi bi-person-circle"></i> Profile
+          </a>
+        </div>
       </div>
-    `,
-    iconSize: [42,28],
-    iconAnchor: [21,28]
-  });
-}
+    </div>
+  </nav>
 
-window.onload = function () {
-  const areaParam = "<%= area %>";
-  const coordMatch = areaParam.match(/(-?\d+\.\d+),\s*(-?\d+\.\d+)/);
+  <div class="layout">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold">Nearby Spots</h5>
+        <span class="badge bg-light text-dark border" id="result-count">Loading...</span>
+      </div>
 
-  if (coordMatch) {
-    initMap(+coordMatch[1], +coordMatch[2]);
-  } else {
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(areaParam)}`)
-      .then(r => r.json())
-      .then(d => initMap(+d[0].lat, +d[0].lon));
-  }
-};
+      <div class="parkings-list" id="parking-list-container">
+        <!-- Skeletons -->
+        <% for(let i=0; i<3; i++) { %>
+          <div class="skeleton-card">
+            <div class="skeleton-box" style="width: 80px; height: 80px; border-radius: 8px;"></div>
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:8px;">
+              <div class="skeleton-box" style="width: 70%; height: 20px;"></div>
+              <div class="skeleton-box" style="width: 50%; height: 16px;"></div>
+            </div>
+          </div>
+          <% } %>
+      </div>
+    </div>
 
-function initMap(lat, lon) {
-  map = L.map("map").setView([lat, lon], 13);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-  loadParking(lat, lon);
-}
+    <!-- Map -->
+    <div id="map"></div>
+  </div>
 
-function loadParking(lat, lon) {
-  fetch(`/parking?lat=${lat}&lon=${lon}`)
-    .then(r => r.json())
-    .then(data => {
-      const list = document.querySelector(".pakingsInfo");
-      list.innerHTML = "";
+  <script>
+    let map;
+    let markers = [];
+    let parkingData = [];
+
+    // Custom Price Marker
+    function createPriceIcon(price) {
+      return L.divIcon({
+        className: 'price-marker-icon',
+        html: `<div class="price-chip">₹${price}</div>`,
+        iconSize: [0, 0] // Handled by CSS
+      });
+    }
+
+    // Initialize
+    window.onload = function () {
+      const areaParam = "<%= area || 'Chandigarh' %>";
+
+      // Default fallback
+      let lat = 30.7333, lon = 76.7794;
+
+      const coordMatch = areaParam.match(/(-?\d+\.\d+),\s*(-?\d+\.\d+)/);
+      if (coordMatch) {
+        lat = +coordMatch[1];
+        lon = +coordMatch[2];
+        initMap(lat, lon);
+      } else {
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(areaParam)}`)
+          .then(r => r.json())
+          .then(d => {
+            if (d && d.length > 0) {
+              initMap(+d[0].lat, +d[0].lon);
+            } else {
+              initMap(lat, lon); // Fallback
+            }
+          })
+          .catch(() => initMap(lat, lon));
+      }
+    };
+
+    function initMap(lat, lon) {
+      map = L.map("map", { zoomControl: false }).setView([lat, lon], 14);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; OpenStreetMap'
+      }).addTo(map);
+
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+      loadParking(lat, lon);
+    }
+
+    function loadParking(lat, lon) {
+      fetch(`/parking?lat=${lat}&lon=${lon}`)
+        .then(r => r.json())
+        .then(data => {
+          parkingData = data;
+          renderList(data);
+          renderMarkers(data);
+          document.getElementById('result-count').innerText = `${data.length} found`;
+        })
+        .catch(err => console.error("Error loading parkings:", err));
+    }
+
+    function renderList(data) {
+      const container = document.getElementById('parking-list-container');
+      container.innerHTML = '';
+
+      if (data.length === 0) {
+        container.innerHTML = '<div class="text-center text-muted mt-5"><p>No parking spots found in this area.</p></div>';
+        return;
+      }
+
+      data.forEach((p, index) => {
+        const img = (p.images && p.images.length) ? p.images[0] : "https://via.placeholder.com/100?text=Parking";
+
+        const card = document.createElement('div');
+        card.className = 'parking-card';
+        card.id = `card-${index}`;
+        card.onclick = () => focusOnMap(index);
+
+        card.innerHTML = `
+                <img src="${img}" class="card-img">
+                <div class="card-info">
+                    <h4 class="card-title text-truncate">${p.name}</h4>
+                    <div class="card-meta text-truncate">
+                        <i class="bi bi-geo-alt-fill"></i> ${p.address?.street || 'City Center'}
+                    </div>
+                    <div class="card-footer">
+                        <span class="price-tag">₹${p.pricing?.hourly || '-'}/hr</span>
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success px-2" style="font-size:0.75rem;">${p.availableSlots} slots</span>
+                    </div>
+                </div>
+            `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderMarkers(data) {
+      // Clear existing
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
+
       const bounds = [];
 
-      data.forEach((p, i) => {
-        const img = p.images?.[0] || "https://via.placeholder.com/240x120";
+      data.forEach((p, index) => {
+        const img = (p.images && p.images.length) ? p.images[0] : "https://via.placeholder.com/260x120?text=Parking";
 
-        /* LEFT CARD */
-        list.innerHTML += `
-          <div class="parking-card">
-            <img src="${img}">
-            <div class="parking-info">
-              <h4>${p.name}</h4>
-              <p>${p.address?.street || ""}</p>
-              <div class="price">₹${p.pricing?.hourly || "-"} / hr</div>
-              <div class="card-actions">
-                <button class="btn-details" onclick="focusParking(${i})">Details</button>
-                <button class="btn-reserve" onclick="location.href='/book?parkingId=${p._id}'">Reserve space</button>
-              </div>
-            </div>
-          </div>
-        `;
+        // Popup content
+        const popupContent = `
+                <div>
+                   <img src="${img}" class="popup-header-img">
+                   <div class="popup-body">
+                       <h5 class="fw-bold mb-1">${p.name}</h5>
+                       <p class="text-muted small mb-2">${p.address?.street || ''}</p>
+                       <div class="d-flex justify-content-between align-items-center mb-3">
+                           <span class="fw-bold fs-6">₹${p.pricing.hourly}/hr</span>
+                           <span class="text-success small fw-bold">${p.availableSlots} Available</span>
+                       </div>
+                       <a href="/book?parkingId=${p._id}" class="btn-reserve shadow-sm">
+                           Book Slot
+                       </a>
+                       <a href="https://www.google.com/maps/dir/?api=1&destination=${p.latitude},${p.longitude}" target="_blank" class="btn btn-sm btn-link text-muted w-100 text-decoration-none mt-2" style="font-size:12px;">
+                           <i class="bi bi-box-arrow-up-right me-1"></i> Get Directions
+                       </a>
+                   </div>
+                </div>
+             `;
 
-        /* POPUP */
-        const popupHTML = `
-          <div class="popup-card">
-            <img src="${img}">
-            <div class="popup-body">
-              <h4>${p.name}</h4>
-              <p>${p.address?.street || ""}</p>
-              <p><strong>₹${p.pricing?.hourly || "-"} / hr</strong></p>
-              <div class="popup-actions">
-                <a class="popup-details" href="https://www.google.com/maps/dir/?api=1&destination=${p.latitude},${p.longitude}" target="_blank">Directions</a>
-                <a class="popup-reserve" href="/book?parkingId=${p._id}">Reserve</a>
-              </div>
-            </div>
-          </div>
-        `;
+        const m = L.marker([p.latitude, p.longitude], {
+          icon: createPriceIcon(p.pricing.hourly)
+        })
+          .addTo(map)
+          .bindPopup(popupContent);
 
-        const marker = L.marker(
-  [p.latitude, p.longitude],
-  { icon: priceMarker(p.pricing?.hourly || "-") }
-).addTo(map)
- .bindPopup(popupHTML, { closeButton: false });
+        // Removed 'mouseover' to fix the "clipping/vanishing" bug. 
+        // Now it requires a click to open, which allows interaction with buttons.
 
-marker.on("mouseover", function () {
-  this.openPopup();
-});
+        m.on('click', () => {
+          highlightCard(index);
+        });
 
-marker.on("mouseout", function () {
-  this.closePopup();
-});
-
-
-        parkingMarkers[i] = marker;
+        markers.push(m);
         bounds.push([p.latitude, p.longitude]);
       });
 
-      map.fitBounds(bounds, { padding: [40,40] });
-    });
-}
+      if (bounds.length) {
+        map.fitBounds(bounds, { padding: [50, 50] });
+      }
+    }
 
-function focusParking(i) {
-  const m = parkingMarkers[i];
-  if (m) {
-    map.setView(m.getLatLng(), 17);
-    m.openPopup();
-  }
-}
-</script>
+    function focusOnMap(index) {
+      if (!markers[index]) return;
 
+      const m = markers[index];
+      map.setView(m.getLatLng(), 16);
+      m.openPopup();
+      highlightCard(index);
+    }
+
+    function highlightCard(index) {
+      // Remove active class from all
+      document.querySelectorAll('.parking-card').forEach(c => c.classList.remove('active'));
+
+      // Add to current
+      const card = document.getElementById(`card-${index}`);
+      if (card) {
+        card.classList.add('active');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

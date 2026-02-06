@@ -50,6 +50,7 @@ const userProfile = require("./routes/userProfile");
 const editProfile = require("./routes/editProfile");
 const owners = require("./routes/owners");
 const dashboard = require("./routes/dashboard");
+const viewBooking = require("./routes/viewBooking");
 // Public routes
 
 
@@ -58,9 +59,10 @@ app.use("/", register);
 app.use("/", login);
 app.use("/", mapView);
 app.use("/profile", restricToLoggedInUserOnly, userProfile, editProfile);
-app.use("/profile", editProfile);
+
 const bookRoute = require("./routes/book");
-app.use("/book", restricToLoggedInUserOnly, bookRoute);
+app.use("/book", restricToLoggedInUserOnly, bookRoute  );
+app.use("/viewBooking", restricToLoggedInUserOnly, viewBooking);
 app.use("/owners", owners);
 app.use("/dashboard", restricToLoggedInUserOnly, dashboard);
 // Admin routes

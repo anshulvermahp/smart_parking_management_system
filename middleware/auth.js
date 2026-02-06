@@ -1,13 +1,12 @@
-const { getUser} = require("../config/auth");
+const { getUser } = require("../config/auth");
 
-async function restricToLoggedInUserOnly(req,res,next) {
+async function restricToLoggedInUserOnly(req, res, next) {
     const token = req.cookies?.uuid;
     if (!token) {
         return res.redirect("/login");
     }
     const user = getUser(token)
-    if(!user)
-    {
+    if (!user) {
         return res.redirect("/login")
     }
     req.user = user;
@@ -47,7 +46,7 @@ function requireAnyRole(roles) {
 }
 
 
-module.exports = 
+module.exports =
 {
     restricToLoggedInUserOnly,
     requireRole,

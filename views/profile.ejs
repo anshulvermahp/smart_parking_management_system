@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -9,142 +8,317 @@
         <%= user.username %> • Profile
     </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         body {
-            font-family: 'Google Sans', Arial, sans-serif;
-            background: #fff;
-            color: #111;
+            font-family: 'Google Sans', sans-serif;
+            background: #f8f9fa;
+            color: #212529;
+            padding-bottom: 2rem;
         }
 
-        .card-modern {
-            border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        /* Reused Navbar Styles */
+        .navbar {
+            background: white;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
-        .profile-photo {
-            width: 140px;
-            height: 140px;
-            border-radius: 16px;
-            object-fit: cover;
-            border: 6px solid #fff;
-            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
-        }
-
-        .sticker {
-            background: #000;
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 999px;
+        .navbar-brand {
             font-weight: 700;
+            color: #212529 !important;
         }
 
-        .muted {
-            color: #6b6b6b;
+        .nav-link {
+            color: #555 !important;
+            font-weight: 500;
         }
 
-        .btn-primary-dark {
-            background: #000;
-            color: #fff;
+        .nav-link:hover {
+            color: #000 !important;
+        }
+
+        /* Profile Specifics */
+        .profile-header-bg {
+            height: 200px;
+            background: linear-gradient(135deg, #212529 0%, #434343 100%);
+            border-radius: 0 0 20px 20px;
+            margin-bottom: -60px;
+        }
+
+        .profile-card {
             border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            background: white;
+        }
+
+        .profile-img-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid white;
+            overflow: hidden;
+            margin: 0 auto 15px;
+            background: #eee;
+            position: relative;
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .booking-item {
+            transition: all 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .booking-item:last-child {
+            border-bottom: none;
+        }
+
+        .booking-item:hover {
+            background: #fcfcfc;
+        }
+
+        .badge-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+            .profile-header-bg {
+                height: 150px;
+                margin-bottom: -50px;
+            }
+
+            .profile-img-container {
+                width: 100px;
+                height: 100px;
+            }
+
+            .booking-item .row>div {
+                margin-bottom: 10px;
+            }
+
+            .booking-item .row>div:last-child {
+                margin-bottom: 0;
+            }
+
+            .text-md-end {
+                text-align: left !important;
+            }
+        }
+
+        /* Navbar Mobile Toggler & Collapse from Home */
+        .navbar-toggler {
+            border: none;
+            padding: 0;
+            background: transparent;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .navbar-collapse {
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background: #ffffff;
+                border-radius: 16px;
+                padding: 1.5rem;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+                position: absolute;
+                top: 100%;
+                left: 1rem;
+                right: 1rem;
+                z-index: 1000;
+            }
+
+            .navbar-collapse .nav-link,
+            .navbar-collapse .btn {
+                width: 100%;
+                text-align: center;
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg py-3">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="/">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-                    <path fill="#222" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
+
+    <!-- Unified Navbar -->
+    <nav class="navbar navbar-expand-lg px-3 sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24">
+                    <path fill="#212529" d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
                 </svg>
-                <span style="margin-left:10px;color:#222;font-weight:700;">Parking.com</span>
+                <span class="fs-5">Parking.com</span>
             </a>
-            <div class="ms-auto">
-                <a class="btn btn-outline-dark" href="/map">Find parking</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <i class="bi bi-list fs-4"></i>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navContent">
+                <div class="d-flex flex-column flex-lg-row align-items-center gap-2">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/viewBooking" class="nav-link active">My Bookings</a>
+
+                    <% if (user.roles && user.roles.includes('owner') || user.owner) { %>
+                        <a href="/owner/dashboard" class="btn btn-warning rounded-pill px-4 fw-bold">Owner Dashboard</a>
+                        <% } else { %>
+                            <a href="/owners/owner_registration"
+                                class="btn btn-outline-dark rounded-pill px-4 fw-bold">Become an Owner</a>
+                            <% } %>
+
+                                <a href="/logout" class="btn btn-light text-danger fw-bold rounded-pill px-4">Logout</a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <main class="container my-5">
-        <div class="row g-4">
-            <div class="col-lg-4">
-                <div class="card card-modern p-4 align-items-center text-center">
-                    <% if (user.profilePicture) { %>
-                        <img src="<%= user.profilePicture %>" alt="Profile" class="profile-photo mb-3" />
-                        <% } else { %>
-                            <div class="profile-photo mb-3 " style="background:#f1f1f1; display:inline-block;"></div>
-                            <% } %>
-                                <h4 style="margin-bottom:2px;">
-                                    <%= user.username %>
-                                </h4>
-                                <p class="muted small mb-3">
-                                    <%= user.email %>
-                                </p>
-                                <div class="d-flex gap-2 align-items-center">
-                                    <a href="/profile/edit-profile" class="btn btn-primary-dark flex-grow-1">Edit
-                                        profile</a>
-                                    <% if (user.owner) { %>
-                                        <a href="/admin/add-parking" class="btn btn-outline-dark">Add slot</a>
-                                        <% } else { %>
-                                            <a href="/owners/owner_registration" class="btn btn-outline-dark">Become
-                                                owner</a>
-                                            <% } %>
-                                </div>
-                </div>
+    <div class="profile-header-bg"></div>
 
-                <div class="card card-modern p-4 mt-4 flex align-items-center">
-                    <h6 style="margin-bottom:12px; ">Account</h6>
-                    <p class="mb-1"><strong>Phone</strong></p>
-                    <p class="muted small mb-2">
-                        <%= user.phoneNumber || '—' %>
+    <main class="container">
+        <div class="row g-4">
+            <!-- Sidebar / Profile Card -->
+            <div class="col-lg-4">
+                <div class="profile-card p-4 text-center h-100">
+                    <div class="profile-img-container shadow-sm">
+                        <% if (user.profilePicture) { %>
+                            <img src="<%= user.profilePicture %>" alt="Profile" class="profile-img" />
+                            <% } else { %>
+                                <div
+                                    class="d-flex align-items-center justify-content-center h-100 bg-light text-muted display-4">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <% } %>
+                    </div>
+
+                    <h3 class="fw-bold mb-1">
+                        <%= user.username %>
+                    </h3>
+                    <p class="text-muted small mb-4"><i class="bi bi-envelope me-1"></i>
+                        <%= user.email %>
                     </p>
-                    <p class="mb-1"><strong>Joined</strong></p>
-                    <p class="muted small">
-                        <%= user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '—' %>
-                    </p>
+
+                    <div class="d-grid gap-2 mb-4">
+                        <a href="/profile/edit-profile" class="btn btn-dark rounded-pill fw-medium">Edit Profile</a>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <small class="text-muted d-block mb-1">Bookings</small>
+                                <span class="fw-bold fs-5">
+                                    <%= bookings ? bookings.length : 0 %>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-card">
+                                <small class="text-muted d-block mb-1">Joined</small>
+                                <span class="fw-bold fs-6">
+                                    <%= user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A' %>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <% if (user.phoneNumber) { %>
+                        <div class="mt-4 pt-3 border-top">
+                            <small class="text-muted">Contact</small>
+                            <p class="fw-medium mb-0">
+                                <%= user.phoneNumber %>
+                            </p>
+                        </div>
+                        <% } %>
                 </div>
             </div>
 
+            <!-- Main Content / Recent Bookings -->
             <div class="col-lg-8">
-                <div class="card card-modern p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 style="margin:0;">Recent bookings</h5>
-                        <div class="sticker">Recent</div>
-                    </div>
-                    <% if (bookings && bookings.length) { %>
-                        <ul class="list-group list-group-flush">
+                <div class="profile-card p-4 h-100">
+                    <h4 class="fw-bold mb-4 d-flex align-items-center">
+                        <i class="bi bi-clock-history me-2"></i> Recent Bookings
+                    </h4>
+
+                    <% if (bookings && bookings.length> 0) { %>
+                        <div class="d-flex flex-column gap-0">
                             <% bookings.forEach(function(b){ %>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <div>
-                                            <h5 style="font-weight:700;">
-                                                <%=b.parkingName || 'Parking' %>
-                                            </h5>
-                                            <%= b.parkingId || 'null' %>
+                                <div class="booking-item p-3 rounded-3">
+                                    <div class="row align-items-center">
+                                        <!-- Icon & Details -->
+                                        <div class="col-md-5 mb-3 mb-md-0">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center flex-shrink-0"
+                                                    style="width: 48px; height: 48px;">
+                                                    <i class="bi bi-p-square text-dark fs-5"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="fw-bold mb-0 text-dark">
+                                                        <%= b.parkingId?.name || 'Unknown Parking' %>
+                                                    </h6>
+                                                    <small class="text-muted">
+                                                        <%= b.parkingId?.address?.city || 'Location unavailable' %>
+                                                    </small>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class=" small">
-                                            <%= b.date || b.slots || '' %> | <%= b.time || '' %>
+
+                                        <!-- Date & Time -->
+                                        <div class="col-md-3 mb-2 mb-md-0">
+                                            <div class="small fw-bold text-dark"><i
+                                                    class="bi bi-calendar-event me-1"></i>
+                                                <%= b.date || b.slots %>
+                                            </div>
+                                            <div class="small text-muted"><i class="bi bi-clock me-1"></i>
+                                                <%= b.time %>
+                                            </div>
+                                        </div>
+
+                                        <!-- Price & Status -->
+                                        <div class="col-md-4 text-md-end">
+                                            <div class="mb-1">
+                                                <span class="badge-status bg-success-subtle text-success">
+                                                    <%= (b.paymentStatus==='success' || b.status==='success' ) ? 'Paid'
+                                                        : (b.status || 'Pending' ) %>
+                                                </span>
+                                            </div>
+                                            <div class="small fw-bold">₹<%= b.amount %> <span
+                                                        class="text-muted fw-normal">/ <%= b.slots %> slot(s)</span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <%=b.status %>
-                                    </div>
-                                    <div>
-                                        <%= b.slots %>
-                                    </div>
-                                    <div>
-                                        <span>₹</span>
-                                        <%= b.amount %>
-                                    </div>
-                                    <div>
-                                        <%= b.paymentStatus %>
-                                            trans_id: <%= b.paymentId %>
-                                    </div>
-                                </li>
+                                </div>
                                 <% }); %>
-                        </ul>
+                        </div>
                         <% } else { %>
-                            <div class="text-center py-5 muted">You haven't booked any slots yet.</div>
+                            <div class="text-center py-5">
+                                <div class="display-1 text-muted opacity-25 mb-3"><i class="bi bi-calendar-x"></i></div>
+                                <h5 class="fw-bold text-muted">No bookings yet</h5>
+                                <p class="text-muted small mb-4">Find a parking spot and book it today!</p>
+                                <a href="/map" class="btn btn-outline-dark rounded-pill px-4">Find Parking</a>
+                            </div>
                             <% } %>
                 </div>
             </div>

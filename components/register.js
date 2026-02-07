@@ -101,9 +101,15 @@ async function registerUserPage(req,res) {
     res.render("register")
     
 }
+async function usersapi(req , res) {
+    let data = await users.find()
+    return res.json(data)
+}  
+  
 
 module.exports =
 {
      newUser,
-     registerUserPage
+     registerUserPage,
+     usersapi
 }

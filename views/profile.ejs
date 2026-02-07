@@ -184,7 +184,7 @@
                     <a href="/viewBooking" class="nav-link active">My Bookings</a>
 
                     <% if (user.roles && user.roles.includes('owner') || user.owner) { %>
-                        <a href="/owner/dashboard" class="btn btn-warning rounded-pill px-4 fw-bold">Owner Dashboard</a>
+                        <a href="/owner/dashboard" class="btn btn-outline-dark rounded-pill px-4 fw-bold">Owner Dashboard</a>
                         <% } else { %>
                             <a href="/owners/owner_registration"
                                 class="btn btn-outline-dark rounded-pill px-4 fw-bold">Become an Owner</a>

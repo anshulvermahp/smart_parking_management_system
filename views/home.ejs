@@ -497,15 +497,18 @@
                 <i class="bi bi-person-fill me-1"></i> Profile
               </a>
 
-              <% if (user.roles && user.roles.includes('owner')) { %>
-                <a href="/owner/dashboard" class="btn btn-dark rounded-pill px-4 fw-bold nav-btn shadow-sm text-white">
+              <% if ((user.roles && user.roles.includes('owner')) || user.owner) { %>
+                <a href="/owner/dashboard" class="btn btn-outline-dark rounded-pill px-4 fw-bold nav-btn">
                   Owner Dashboard
                 </a>
-                <% } else { %>
-                  <a href="/owners/owner_registration" class="btn btn-outline-dark rounded-pill px-4 fw-bold nav-btn">
-                    Become a Host
-                  </a>
-                  <% } %>
+                <a href="/owners/profile" class="btn btn-outline-dark rounded-pill px-4 fw-bold nav-btn">
+                  Owner Profile
+                </a>
+              <% } else { %>
+                <a href="/owners/owner_registration" class="btn btn-outline-dark rounded-pill px-4 fw-bold nav-btn">
+                  Become a Host
+                </a>
+              <% } %>
 
                     <% } else { %>
                       <a href="/login" class="btn btn-link text-decoration-none fw-semibold nav-btn">Log in</a>
@@ -519,7 +522,7 @@
       </div>
     </nav>
 
-    <div class="hero-content container">
+    <div class="hero-content container mt-5 pt-5"> ">
       <h1 class="hero-title">
         Parking made <br><span>effortless.</span>
       </h1>
